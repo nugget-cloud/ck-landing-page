@@ -1,7 +1,6 @@
 
 import joblib
 import pandas as pd
-import numpy as np
 import sys
 import json
 import os
