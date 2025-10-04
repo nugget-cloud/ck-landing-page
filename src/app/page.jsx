@@ -4,16 +4,97 @@ import { useEffect, useState } from 'react';
 import Chatbot from './components/Chatbot';
 
 export default function Page() {
-  const [userType, setUserType] = useState(null); // null, 'developer', 'beginner'
-  const [showSelection, setShowSelection] = useState(true); // Show modal by default
+  const [userType, setUserType] = useState(null); 
+  const [showSelection, setShowSelection] = useState(true);
+  
+  // Prediction model state
+  const [predictionData, setPredictionData] = useState({
+    pl_orbper: '',     // Orbital Period (days)
+    pl_rade: '',       // Planet Radius (Earth radii)
+    pl_bmasse: '',     // Planet Mass (Earth masses)
+    pl_dens: '',       // Planet Density (g/cm^3)
+    pl_orbsmax: '',    // Orbital Semi-Major Axis (AU)
+    pl_orbeccen: '',   // Orbital Eccentricity
+    pl_insol: '',      // Insolation Flux (Earth flux)
+    pl_eqt: '',        // Equilibrium Temperature (K)
+    st_teff: '',       // Stellar Effective Temperature (K)
+    st_rad: '',        // Stellar Radius (Solar radii)
+    st_mass: '',       // Stellar Mass (Solar masses)
+    st_logg: ''        // Stellar Surface Gravity (log g)
+  });
+  const [predictionResult, setPredictionResult] = useState(null);
+  const [isLoadingPrediction, setIsLoadingPrediction] = useState(false);
+  const [predictionError, setPredictionError] = useState(null);
+
+  // Handle prediction form input changes
+  const handlePredictionInputChange = (field, value) => {
+    setPredictionData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Submit prediction to API
+  const submitPrediction = async () => {
+    setIsLoadingPrediction(true);
+    setPredictionError(null);
+    setPredictionResult(null);
+
+    try {
+      // Convert string values to numbers for the API
+      const numericData = Object.fromEntries(
+        Object.entries(predictionData).map(([key, value]) => [
+          key, 
+          value === '' ? null : parseFloat(value)
+        ])
+      );
+
+      const response = await fetch('/api/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(numericData)
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Prediction failed');
+      }
+
+      setPredictionResult(result);
+    } catch (error) {
+      setPredictionError(error.message);
+    } finally {
+      setIsLoadingPrediction(false);
+    }
+  };
+
+  // Load example exoplanet data
+  const loadExampleData = () => {
+    setPredictionData({
+      pl_orbper: '365.25',      // 1 Earth year
+      pl_rade: '1.0',          // 1 Earth radius  
+      pl_bmasse: '1.0',        // 1 Earth mass
+      pl_dens: '5.51',         // Earth density
+      pl_orbsmax: '1.0',       // 1 AU
+      pl_orbeccen: '0.017',    // Earth's eccentricity
+      pl_insol: '1.0',         // 1 Earth flux
+      pl_eqt: '255',           // Earth equilibrium temp
+      st_teff: '5778',         // Sun temperature
+      st_rad: '1.0',           // 1 Solar radius
+      st_mass: '1.0',          // 1 Solar mass
+      st_logg: '4.44'          // Sun surface gravity
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.3; // Reduced parallax rate for smoother effect
+      const rate = scrolled * -0.3; 
       const rateTwo = scrolled * -0.2;
       
-      // Parallax effect on space background
       const spaceBg = document.getElementById('space-bg');
       const celestialObjects = document.getElementById('celestial-objects');
       
@@ -25,7 +106,6 @@ export default function Page() {
         celestialObjects.style.transform = `translateY(${rateTwo}px)`;
       }
       
-      // Remove focus overlay if it exists (user requested removal)
       const focusOverlay = document.getElementById('focus-overlay');
       if (focusOverlay) {
         focusOverlay.remove();
@@ -37,16 +117,14 @@ export default function Page() {
   }, []);
   return (
     <div className="main-container min-h-screen bg-transparent relative">
-      {/* Sophisticated Space Background - Fixed to cover entire page */}
       <div className="fixed inset-0 w-full h-full z-[-1]" id="space-bg">
-        {/* Subtle starfield - distributed across full viewport */}
         {[...Array(200)].map((_, i) => (
           <div
             key={i}
             className="subtle-star absolute bg-white rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 200}%`, // Extended to cover more area when scrolling
+              top: `${Math.random() * 200}%`, 
               width: `${1 + Math.random() * 2}px`,
               height: `${1 + Math.random() * 2}px`,
               animationDelay: `${Math.random() * 3}s`,
@@ -55,20 +133,18 @@ export default function Page() {
           />
         ))}
 
-        {/* Multiple nebula clouds for full page coverage */}
         <div className="nebula-cloud absolute top-1/4 right-1/3 w-80 h-80 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl"></div>
         <div className="nebula-cloud absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-to-tl from-gray-500/3 to-transparent rounded-full blur-3xl"></div>
         <div className="nebula-cloud absolute top-3/4 right-1/5 w-72 h-72 bg-gradient-to-bl from-white/3 to-transparent rounded-full blur-3xl"></div>
         <div className="nebula-cloud absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-tr from-gray-400/2 to-transparent rounded-full blur-3xl"></div>
 
-        {/* More floating particles for extended coverage */}
         {[...Array(50)].map((_, i) => (
           <div
             key={`particle-${i}`}
             className="space-particle"
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 200}%`, // Extended coverage
+              top: `${Math.random() * 200}%`,
               width: `${2 + Math.random() * 4}px`,
               height: `${2 + Math.random() * 4}px`,
               animationDelay: `${Math.random() * 12}s`,
@@ -78,9 +154,7 @@ export default function Page() {
         ))}
       </div>
 
-      {/* Subtle celestial objects - also extended */}
       <div className="fixed inset-0 w-full h-full z-[-1] pointer-events-none" id="celestial-objects">
-        {/* Distant planet silhouettes distributed throughout the page */}
         <div className="absolute top-1/5 right-1/6 w-24 h-24 rounded-full bg-white/10 blur-sm" style={{ animation: 'subtleFloat 15s ease-in-out infinite' }}></div>
         <div className="absolute top-2/3 left-1/8 w-16 h-16 rounded-full bg-gray-300/8 blur-sm" style={{ animation: 'subtleFloat 18s ease-in-out infinite -5s' }}></div>
         <div className="absolute top-1/2 right-1/2 w-12 h-12 rounded-full bg-white/5 blur-md" style={{ animation: 'subtleFloat 20s ease-in-out infinite -10s' }}></div>
@@ -88,10 +162,8 @@ export default function Page() {
         <div className="absolute top-1/3 left-1/5 w-14 h-14 rounded-full bg-white/8 blur-md" style={{ animation: 'subtleFloat 19s ease-in-out infinite -3s' }}></div>
       </div>
 
-      {/* Additional background layer to ensure continuity */}
       <div className="fixed inset-0 w-full z-[-2] bg-black"></div>
 
-      {/* Navigation Header */}
       <header className="relative z-20 flex justify-between items-center p-8">
         <div className="text-white">
           <h1 className="text-3xl font-bold leading-tight gradient-text">Space</h1>
@@ -112,6 +184,7 @@ export default function Page() {
               <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
               <a href="#docs" className="hover:text-white transition-colors">Documentation</a>
               <a href="#examples" className="hover:text-white transition-colors">Examples</a>
+              <a href="#prediction" className="hover:text-white transition-colors">AI Model</a>
               <a href="#community" className="hover:text-white transition-colors">Community</a>
               <a href="#models" className="hover:text-white transition-colors">Models</a>
             </>
@@ -135,7 +208,6 @@ export default function Page() {
         )}
       </header>
 
-      {/* Hero Section */}
       <main className="relative z-10 flex flex-col items-center justify-center px-4 sm:px-8 py-12 sm:py-20 min-h-[80vh]">
         <div className="text-center mb-8 sm:mb-12 max-w-6xl">
           <h2 className="hero-title text-4xl sm:text-6xl md:text-8xl font-bold text-white leading-tight mb-6 sm:mb-8">
@@ -151,54 +223,10 @@ export default function Page() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button 
-              onClick={() => setShowSelection(true)}
-              className="bg-white text-black px-10 py-5 rounded-lg text-xl font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-xl"
-            >
-              Get Started
-            </button>
           </div>
         </div>
 
-        {/* Code Preview */}
-        <div className="w-full max-w-4xl mt-16">
-          <div className="code-block rounded-xl p-8 shadow-2xl">
-            <div className="flex items-center mb-6">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <span className="ml-4 text-gray-400 text-sm font-mono">simple_pipeline.py</span>
-            </div>
-            <pre className="text-gray-300 font-mono text-sm leading-relaxed overflow-x-auto">
-              <code>{`# Transform complex NASA data access into simple queries
-from nasa_port.data_bindings import NASAPipeline
-from nasa_port.builder.query_builder import QueryBuilder
-
-# Create pipeline instance
-pipeline = NASAPipeline.for_local_development(
-    pipeline_name="exoplanet_discoveries"
-)
-
-# Build query for recent discoveries
-query = (
-    QueryBuilder()
-    .select(['pl_name', 'hostname', 'disc_year'])
-    .from_table(TableName.PLANETARY_SYSTEMS)
-    .where_confirmed()
-    .order_by('disc_year', ascending=False)
-    .limit(10)
-)
-
-# Execute and get results - thousands of lines replaced!
-results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
-            </pre>
-          </div>
-        </div>
       </main>
-
-      {/* User Selection Modal */}
       {!userType && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black starry-background">
           <div className="bg-black p-6 max-w-xl mx-4 animate-fade-in starry-background">
@@ -345,7 +373,6 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
             </div>
           </section>
 
-          {/* What are Exoplanets Section */}
           <section id="what-are" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-transparent">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
@@ -390,7 +417,6 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
                 </div>
 
                 <div className="bg-gray-900/20 rounded-2xl p-8 border border-gray-700">
-                  {/* NASA Animation Embed - Proxima Centauri b */}
                   <h5 className="text-xl font-bold text-white mb-4 text-center">Proxima Centauri b</h5>
                   <div className="bg-gray-800 rounded-lg p-4 mb-4 relative">
                     <div className="aspect-video bg-gray-700 rounded flex items-center justify-center relative">
@@ -1383,7 +1409,6 @@ def run_pipeline():
             </div>
           </div>
 
-          {/* Community Pipelines Grid */}
           <div className="mb-16">
             <h4 className="text-2xl font-bold text-white mb-8 text-center">Recent Community Contributions</h4>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1394,7 +1419,8 @@ def run_pipeline():
                   description: "Identifies potentially habitable exoplanets based on distance from their host star and planetary characteristics.",
                   tags: ["habitable-zone", "earth-like", "analysis"],
                   stars: 234,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 },
                 {
                   title: "Transit Light Curves",
@@ -1402,7 +1428,8 @@ def run_pipeline():
                   description: "Processes NASA transit photometry data to extract planetary radius and orbital period measurements.",
                   tags: ["transit", "photometry", "kepler"],
                   stars: 189,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 },
                 {
                   title: "Multi-Star Systems",
@@ -1410,7 +1437,8 @@ def run_pipeline():
                   description: "Analyzes complex multi-star systems and their planetary companions using advanced orbital mechanics.",
                   tags: ["binary-stars", "orbital-dynamics", "complex-systems"],
                   stars: 156,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 },
                 {
                   title: "Atmospheric Analysis", 
@@ -1418,7 +1446,8 @@ def run_pipeline():
                   description: "Pipeline for processing spectroscopic data to determine exoplanet atmospheric composition.",
                   tags: ["spectroscopy", "atmosphere", "jwst"],
                   stars: 143,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 },
                 {
                   title: "Planet Population Stats",
@@ -1426,7 +1455,8 @@ def run_pipeline():
                   description: "Statistical analysis of exoplanet populations across different stellar types and galactic regions.",
                   tags: ["statistics", "population", "demographics"],
                   stars: 128,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 },
                 {
                   title: "Radial Velocity Hunter",
@@ -1434,10 +1464,11 @@ def run_pipeline():
                   description: "Detects exoplanets using radial velocity method and calculates precise orbital parameters.",
                   tags: ["radial-velocity", "doppler", "detection"],
                   stars: 112,
-                  language: "Python"
+                  language: "Python",
+                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
                 }
               ].map((pipeline, index) => (
-                <div key={index} className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-white/30 transition-all">
+                <a key={index} href={pipeline.link} target="_blank" rel="noopener noreferrer" className="block bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-white/30 transition-all">
                   <div className="flex justify-between items-start mb-3">
                     <h5 className="text-lg font-bold text-white">{pipeline.title}</h5>
                     <div className="flex items-center text-gray-400 text-sm">
@@ -1457,12 +1488,346 @@ def run_pipeline():
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="text-gray-400 text-sm">by {pipeline.author}</div>
-                    <button className="text-white hover:text-gray-300 transition-colors text-sm">
+                    <div className="text-white hover:text-gray-300 transition-colors text-sm">
                       View Code →
-                    </button>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Exoplanet Prediction Model Section */}
+      <section id="prediction" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/20 to-gray-900/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h3 className="text-5xl font-bold text-white mb-6">
+              Exoplanet <span className="gradient-text">Prediction Model</span>
+            </h3>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+              Use our trained machine learning model to predict whether a celestial object is a confirmed exoplanet 
+              based on its physical and orbital characteristics. Input the parameters below to get real-time predictions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Input Form */}
+            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h4 className="text-2xl font-bold text-white">Model Input Parameters</h4>
+                <button 
+                  onClick={loadExampleData}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-500 transition-all"
+                >
+                  Load Earth Example
+                </button>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Planetary Parameters */}
+                <div>
+                  <h5 className="text-lg font-semibold text-white mb-4">Planetary Parameters</h5>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Orbital Period (days)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_orbper}
+                        onChange={(e) => handlePredictionInputChange('pl_orbper', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 365.25"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Planet Radius (Earth radii)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_rade}
+                        onChange={(e) => handlePredictionInputChange('pl_rade', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Planet Mass (Earth masses)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_bmasse}
+                        onChange={(e) => handlePredictionInputChange('pl_bmasse', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Planet Density (g/cm³)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_dens}
+                        onChange={(e) => handlePredictionInputChange('pl_dens', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 5.51"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Semi-Major Axis (AU)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_orbsmax}
+                        onChange={(e) => handlePredictionInputChange('pl_orbsmax', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Orbital Eccentricity
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_orbeccen}
+                        onChange={(e) => handlePredictionInputChange('pl_orbeccen', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 0.017"
+                      />
+                    </div>
                   </div>
                 </div>
-              ))}
+
+                {/* Stellar Parameters */}
+                <div>
+                  <h5 className="text-lg font-semibold text-white mb-4">Stellar & Environmental Parameters</h5>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Insolation Flux (Earth flux)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_insol}
+                        onChange={(e) => handlePredictionInputChange('pl_insol', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Equilibrium Temperature (K)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.pl_eqt}
+                        onChange={(e) => handlePredictionInputChange('pl_eqt', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 255"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Stellar Temperature (K)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.st_teff}
+                        onChange={(e) => handlePredictionInputChange('st_teff', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 5778"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Stellar Radius (Solar radii)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.st_rad}
+                        onChange={(e) => handlePredictionInputChange('st_rad', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Stellar Mass (Solar masses)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.st_mass}
+                        onChange={(e) => handlePredictionInputChange('st_mass', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 1.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Stellar Surface Gravity (log g)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={predictionData.st_logg}
+                        onChange={(e) => handlePredictionInputChange('st_logg', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        placeholder="e.g. 4.44"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <button
+                  onClick={submitPrediction}
+                  disabled={isLoadingPrediction}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
+                >
+                  {isLoadingPrediction ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Running Prediction...
+                    </span>
+                  ) : (
+                    'Predict Exoplanet Status'
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Results Display */}
+            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+              <h4 className="text-2xl font-bold text-white mb-6">Prediction Results</h4>
+              
+              {predictionError && (
+                <div className="bg-red-900/30 border border-red-500/30 rounded-lg p-6 mb-6">
+                  <div className="flex items-center mb-2">
+                    <svg className="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    <h5 className="text-red-400 font-medium">Error</h5>
+                  </div>
+                  <p className="text-red-300">{predictionError}</p>
+                </div>
+              )}
+
+              {predictionResult && (
+                <div className="space-y-6">
+                  {/* Main Prediction Result */}
+                  <div className={`border rounded-xl p-6 ${
+                    predictionResult.prediction === 1 
+                      ? 'bg-green-900/30 border-green-500/30' 
+                      : 'bg-orange-900/30 border-orange-500/30'
+                  }`}>
+                    <div className="text-center">
+                      <div className={`text-4xl font-bold mb-2 ${
+                        predictionResult.prediction === 1 ? 'text-green-400' : 'text-orange-400'
+                      }`}>
+                        {predictionResult.prediction === 1 ? '✅ EXOPLANET' : '❌ NOT EXOPLANET'}
+                      </div>
+                      <p className="text-gray-300">
+                        The model predicts this object is {predictionResult.prediction === 1 ? '' : 'not '}
+                        a confirmed exoplanet
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Confidence Scores */}
+                  <div className="bg-gray-800/50 rounded-xl p-6">
+                    <h5 className="text-xl font-bold text-white mb-4">Confidence Scores</h5>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-gray-300">Exoplanet Probability</span>
+                          <span className="text-white font-medium">
+                            {(predictionResult.confidence.planet * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-3">
+                          <div 
+                            className="bg-green-400 h-3 rounded-full transition-all duration-1000"
+                            style={{ width: `${predictionResult.confidence.planet * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-gray-300">Not Exoplanet Probability</span>
+                          <span className="text-white font-medium">
+                            {(predictionResult.confidence.not_planet * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-3">
+                          <div 
+                            className="bg-orange-400 h-3 rounded-full transition-all duration-1000"
+                            style={{ width: `${predictionResult.confidence.not_planet * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Model Information */}
+                  <div className="bg-gray-800/50 rounded-xl p-6">
+                    <h5 className="text-lg font-bold text-white mb-3">Model Information</h5>
+                    <div className="text-sm text-gray-300 space-y-2">
+                      <p><strong className="text-white">Model Type:</strong> Ensemble Machine Learning</p>
+                      <p><strong className="text-white">Training Data:</strong> NASA Exoplanet Archive</p>
+                      <p><strong className="text-white">Features:</strong> 12 planetary and stellar parameters</p>
+                      <p><strong className="text-white">Prediction:</strong> Binary classification (Planet/Not Planet)</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {!predictionResult && !predictionError && !isLoadingPrediction && (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 mb-4">
+                    <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <h5 className="text-xl text-gray-400 mb-2">Ready for Prediction</h5>
+                  <p className="text-gray-500">
+                    Fill in the planetary and stellar parameters, then click "Predict Exoplanet Status" 
+                    to see the model's inference.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
