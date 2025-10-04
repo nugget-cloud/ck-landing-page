@@ -1,26 +1,222 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent-primary: #ffffff;
+  --accent-secondary: #888888;
+  --accent-tertiary: #444444;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Sophisticated space animations */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-5px) translateX(2px);
+  }
+  50% {
+    transform: translateY(0px) translateX(5px);
+  }
+  75% {
+    transform: translateY(5px) translateX(-2px);
+  }
+}
+
+@keyframes slowOrbit {
+  0% {
+    transform: rotate(0deg) translateX(100px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(100px) rotate(-360deg);
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes subtleTwinkle {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes nebula {
+  0%, 100% {
+    opacity: 0.05;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.15;
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+/* Particle system */
+.space-particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: subtleFloat 12s ease-in-out infinite;
+}
+
+.nebula-cloud {
+  animation: nebula 20s ease-in-out infinite;
+}
+
+.subtle-star {
+  animation: subtleTwinkle 3s ease-in-out infinite;
+}
+
+.subtle-star:nth-child(even) {
+  animation-delay: -1.5s;
+}
+
+.subtle-star:nth-child(3n) {
+  animation-delay: -1s;
+}
+
+/* Scroll-based parallax */
+.parallax-slow {
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-medium {
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-fast {
+  transition: transform 0.1s ease-out;
+}
+
+/* Monochrome text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff, #cccccc, #888888);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Code block styling */
+.code-block {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive design utilities */
+@media (max-width: 768px) {
+  .exoplanet {
+    width: 60% !important;
+    height: 60% !important;
+  }
+  
+  .hero-title {
+    font-size: 3rem !important;
+  }
+  
+  .code-block {
+    font-size: 0.75rem;
+    padding: 1rem !important;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Improved accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .exoplanet,
+  .star,
+  .gradient-text {
+    animation: none !important;
+  }
+}
+
+/* Focus states for better accessibility */
+button:focus,
+a:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Loading animation for code blocks */
+.code-loading {
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
