@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Chatbot from './components/Chatbot';
 
 export default function Page() {
+  const [userType, setUserType] = useState(null); // null, 'developer', 'beginner'
+  const [showSelection, setShowSelection] = useState(true); // Show modal by default
+
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
@@ -23,53 +26,11 @@ export default function Page() {
         celestialObjects.style.transform = `translateY(${rateTwo}px)`;
       }
       
-      // Create vertical focus effect with dimming only on top and bottom
-      let focusOverlay = document.getElementById('focus-overlay');
-      if (!focusOverlay) {
-        focusOverlay = document.createElement('div');
-        focusOverlay.id = 'focus-overlay';
-        focusOverlay.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          pointer-events: none;
-          z-index: 15;
-          transition: background 0.2s ease;
-        `;
-        document.body.appendChild(focusOverlay);
+      // Remove focus overlay if it exists (user requested removal)
+      const focusOverlay = document.getElementById('focus-overlay');
+      if (focusOverlay) {
+        focusOverlay.remove();
       }
-      
-      const viewportHeight = window.innerHeight;
-      
-      const focusAreaHeight = viewportHeight * 0.7; // 70% of viewport height for focus (increased)
-      const fadeHeight = viewportHeight * 0.1; // 15% fade zone on each side (reduced)
-      
-      const topFadeEnd = fadeHeight;
-      const focusStart = (viewportHeight - focusAreaHeight) / 2;
-      const focusEnd = focusStart + focusAreaHeight;
-      const bottomFadeStart = viewportHeight - fadeHeight;
-      
-      focusOverlay.style.background = `
-        linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.4) 0%,
-          rgba(0, 0, 0, 0.2) ${(topFadeEnd / viewportHeight) * 100}%,
-          rgba(0, 0, 0, 0.05) ${(focusStart / viewportHeight) * 100}%,
-          transparent ${(focusStart + 20) / viewportHeight * 100}%,
-          transparent ${(focusEnd - 20) / viewportHeight * 100}%,
-          rgba(0, 0, 0, 0.05) ${(focusEnd / viewportHeight) * 100}%,
-          rgba(0, 0, 0, 0.2) ${(bottomFadeStart / viewportHeight) * 100}%,
-          rgba(0, 0, 0, 0.4) 100%
-        )
-      `;
-      
-      // Reset any section-based opacity changes
-      const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        section.style.opacity = '';
-      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -131,12 +92,24 @@ export default function Page() {
           <p className="text-xl font-light -mt-1 text-gray-300">Port</p>
         </div>
         <nav className="hidden md:flex space-x-6 text-gray-300 text-sm">
-          <a href="#features" className="hover:text-white transition-colors">Features</a>
-          <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
-          <a href="#docs" className="hover:text-white transition-colors">Documentation</a>
-          <a href="#examples" className="hover:text-white transition-colors">Examples</a>
-          <a href="#community" className="hover:text-white transition-colors">Community</a>
-          <a href="#models" className="hover:text-white transition-colors">Models</a>
+          {userType === 'beginner' ? (
+            <>
+              <a href="#what-are" className="hover:text-white transition-colors">What are Exoplanets</a>
+              <a href="#why-search" className="hover:text-white transition-colors">Why Search</a>
+              <a href="#how-find" className="hover:text-white transition-colors">How We Find</a>
+              <a href="#types" className="hover:text-white transition-colors">Types</a>
+              <a href="#future" className="hover:text-white transition-colors">Future</a>
+            </>
+          ) : (
+            <>
+              <a href="#features" className="hover:text-white transition-colors">Features</a>
+              <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
+              <a href="#docs" className="hover:text-white transition-colors">Documentation</a>
+              <a href="#examples" className="hover:text-white transition-colors">Examples</a>
+              <a href="#community" className="hover:text-white transition-colors">Community</a>
+              <a href="#models" className="hover:text-white transition-colors">Models</a>
+            </>
+          )}
         </nav>
         <button className="bg-white text-black px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg">
           Get Started →
@@ -159,11 +132,11 @@ export default function Page() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="bg-white text-black px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-xl">
-              🚀 Start Exploring
-            </button>
-            <button className="border border-gray-600 text-gray-300 px-8 py-4 rounded-lg text-lg font-medium hover:bg-white hover:text-black transition-all">
-              📖 View Documentation
+            <button 
+              onClick={() => setShowSelection(true)}
+              className="bg-white text-black px-10 py-5 rounded-lg text-xl font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-xl"
+            >
+              Get Started
             </button>
           </div>
         </div>
@@ -205,6 +178,630 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
           </div>
         </div>
       </main>
+
+      {/* User Selection Modal */}
+      {!userType && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md starry-background">
+          <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-10 max-w-3xl mx-4 border border-gray-600 shadow-2xl animate-fade-in starry-background">
+            <h3 className="text-4xl font-bold text-white mb-8 text-center gradient-text">Choose Your Path</h3>
+            <p className="text-xl text-gray-300 text-center mb-10 leading-relaxed">
+              Tell us about yourself so we can show you the most relevant content
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <button
+                onClick={() => setUserType('beginner')}
+                className="bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600 hover:border-white/30 text-white p-8 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+              >
+                <div className="w-16 h-16 bg-gray-600 rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h4 className="text-2xl font-bold mb-4">I'm New to Exoplanets</h4>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  Learn about exoplanets from the basics - what they are, why we search for them, and how they're discovered
+                </p>
+              </button>
+              
+              <button
+                onClick={() => setUserType('developer')}
+                className="bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600 hover:border-white/30 text-white p-8 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+              >
+                <div className="w-16 h-16 bg-gray-600 rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <h4 className="text-2xl font-bold mb-4">I'm a Developer/Researcher</h4>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  Access NASA's exoplanet data with our powerful Python pipeline and API tools
+                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Beginner Learning Section */}
+      {userType === 'beginner' && (
+        <>
+          {/* Floating Navigation Controls */}
+          <div className="fixed top-1/2 right-8 z-50 transform -translate-y-1/2">
+            <span
+              onClick={() => setUserType('developer')}
+              className="inline-block text-xs text-gray-500 hover:text-white transition-all duration-300 cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-800/50"
+            >
+              Switch to Developer Mode
+            </span>
+          </div>
+
+          {/* Sticky Progress Navigation */}
+          <div className="sticky top-8 z-40 py-4 px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex justify-center items-center space-x-2 bg-gray-900/90 backdrop-blur-md rounded-full px-8 py-4 border border-gray-600 shadow-2xl">
+                <button
+                  onClick={() => document.getElementById('what-are').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black text-sm font-bold">1</div>
+                  <span className="text-white text-base font-medium">What are Exoplanets</span>
+                </button>
+                <div className="w-12 h-0.5 bg-gray-500"></div>
+                <button
+                  onClick={() => document.getElementById('why-search').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                  <span className="text-gray-300 text-base font-medium">Why Search</span>
+                </button>
+                <div className="w-12 h-0.5 bg-gray-500"></div>
+                <button
+                  onClick={() => document.getElementById('how-find').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                  <span className="text-gray-300 text-base font-medium">How We Find</span>
+                </button>
+                <div className="w-12 h-0.5 bg-gray-500"></div>
+                <button
+                  onClick={() => document.getElementById('types').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
+                  <span className="text-gray-300 text-base font-medium">Types</span>
+                </button>
+                <div className="w-12 h-0.5 bg-gray-500"></div>
+                <button
+                  onClick={() => document.getElementById('future').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
+                  <span className="text-gray-300 text-base font-medium">Future</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Learning Hero */}
+          <section className="relative z-10 py-24 px-8 text-center">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="hero-title text-5xl md:text-7xl font-bold text-white mb-8">
+                Discover <span className="gradient-text">Exoplanets</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
+                Journey into the fascinating world of planets beyond our solar system. 
+                Learn what exoplanets are, how we find them, and why they're crucial for understanding our universe.
+              </p>
+              
+              {/* Visual Statistics */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div className="text-center p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                  </div>
+                  <div className="text-lg text-gray-400">5,000+</div>
+                  <div className="text-base text-white font-medium">Discovered</div>
+                </div>
+                <div className="text-center p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="text-lg text-gray-400">100+</div>
+                  <div className="text-base text-white font-medium">Earth-like</div>
+                </div>
+                <div className="text-center p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div className="text-lg text-gray-400">4.2</div>
+                  <div className="text-base text-white font-medium">Light-years</div>
+                </div>
+                <div className="text-center p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <div className="text-lg text-gray-400">Billions</div>
+                  <div className="text-base text-white font-medium">In Galaxy</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* What are Exoplanets Section */}
+          <section id="what-are" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-transparent">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">What are Exoplanets?</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  Exoplanets, or extrasolar planets, are planets that exist outside our solar system, 
+                  orbiting stars other than our Sun.
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                  <h4 className="text-2xl font-bold text-white mb-6">The Basics</h4>
+                  <div className="space-y-6">
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+                      <h5 className="text-2xl font-bold text-white mb-4">Definition</h5>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        An exoplanet is any planet beyond our solar system. Most orbit other stars, 
+                        but some free-floating exoplanets, called rogue planets, orbit the galactic center 
+                        and are untethered to any star.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+                      <h5 className="text-2xl font-bold text-white mb-4">Numbers</h5>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        Over 5,000 exoplanets have been confirmed so far, with thousands more candidates 
+                        awaiting confirmation. Scientists estimate there could be trillions of exoplanets 
+                        in our galaxy alone.
+                      </p>
+                    </div>
+
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+                      <h5 className="text-2xl font-bold text-white mb-4">Discovery</h5>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        The first exoplanet around a main-sequence star was discovered in 1995. 
+                        Since then, space telescopes like Kepler and TESS have revolutionized our 
+                        ability to find these distant worlds.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-900/20 rounded-2xl p-8 border border-gray-700">
+                  {/* NASA Animation Embed - Proxima Centauri b */}
+                  <h5 className="text-xl font-bold text-white mb-4 text-center">Proxima Centauri b</h5>
+                  <div className="bg-gray-800 rounded-lg p-4 mb-4 relative">
+                    <div className="aspect-video bg-gray-700 rounded flex items-center justify-center relative">
+                      <div className="text-center">
+                        <div className="animate-pulse">
+                          <div className="w-16 h-16 bg-red-600 rounded-full mx-auto mb-4 relative">
+                            <div className="w-4 h-4 bg-blue-600 rounded-full absolute top-6 left-12 animate-pulse"></div>
+                          </div>
+                        </div>
+                        <p className="text-gray-300 text-sm">Interactive Exoplanet Visualization</p>
+                        <p className="text-gray-400 text-xs mt-1">
+                          Click to explore on NASA's website
+                        </p>
+                      </div>
+                      <a 
+                        href="https://science.nasa.gov/exoplanet-catalog/proxima-centauri-b/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity"
+                      >
+                        <span className="text-white bg-blue-600 px-4 py-2 rounded-lg">
+                          View on NASA →
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm text-center">
+                    The closest known exoplanet to Earth, located just 4.2 light-years away 
+                    in the habitable zone of Proxima Centauri.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Why Search for Exoplanets */}
+          <section id="why-search" className="relative z-10 py-24 px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">Why Do We Search for Exoplanets?</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  The search for exoplanets drives some of the most important questions in science and philosophy.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Search for Life</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    Finding Earth-like planets in habitable zones could reveal whether life 
+                    exists elsewhere in the universe, answering one of humanity's greatest questions.
+                  </p>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Future Homes</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    Understanding exoplanets helps us identify potential future homes for humanity 
+                    and learn about planetary formation and evolution.
+                  </p>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Scientific Discovery</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    Each exoplanet teaches us about physics, chemistry, and the incredible 
+                    diversity of planetary systems in our galaxy.
+                  </p>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Technology Advancement</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    The challenge of detecting distant worlds drives innovation in telescopes, 
+                    sensors, and data analysis techniques.
+                  </p>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Cosmic Perspective</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    Discovering the abundance of exoplanets changes our perspective on Earth's 
+                    place in the cosmos and our responsibility to protect it.
+                  </p>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Understanding Origins</h4>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    Studying diverse planetary systems helps us understand how our own 
+                    solar system formed and evolved over billions of years.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* How We Find Exoplanets */}
+          <section id="how-find" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-transparent">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">How Do We Find Exoplanets?</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  Scientists use several clever methods to detect planets light-years away.
+                </p>
+              </div>
+
+              <div className="space-y-12">
+                {/* Transit Method */}
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <h4 className="text-3xl font-bold text-white mb-6">Transit Method</h4>
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6 mb-6">
+                      <p className="text-gray-300 text-lg">
+                        When a planet passes in front of its star (as seen from Earth), it blocks 
+                        a tiny amount of the star's light. This creates a periodic dimming that 
+                        we can detect with sensitive instruments.
+                      </p>
+                    </div>
+                    <ul className="space-y-4 text-gray-300 text-lg">
+                      <li><strong className="text-white">Success Rate:</strong> Found over 70% of confirmed exoplanets</li>
+                      <li><strong className="text-white">What We Learn:</strong> Planet size, orbital period, and sometimes atmosphere</li>
+                      <li><strong className="text-white">Tools:</strong> Kepler, TESS, and ground-based telescopes</li>
+                    </ul>
+                  </div>
+                  <div className="bg-gray-900/20 rounded-2xl p-6 border border-gray-700">
+                    <div className="bg-gray-800 rounded-lg p-4 h-64 flex items-center justify-center relative overflow-hidden">
+                      {/* Star */}
+                      <div className="absolute w-24 h-24 bg-gradient-to-br from-gray-300 to-white rounded-full shadow-2xl"></div>
+                      
+                      {/* Planet transit animation */}
+                      <div className="absolute w-6 h-6 bg-gray-700 rounded-full animate-transit"></div>
+                      
+                      {/* Light curve representation */}
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="h-8 bg-gray-700 rounded flex items-center">
+                          <div className="w-full h-1 bg-gray-500 rounded relative">
+                            <div className="absolute w-4 h-2 bg-gray-600 rounded animate-dip"></div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-400 text-center mt-1">Light Curve</div>
+                      </div>
+                      
+                      <div className="absolute bottom-16 left-0 right-0 text-center">
+                        <div className="text-white mb-1 font-medium">Transit Method</div>
+                        <div className="text-sm text-gray-400">Planet crossing star dims light</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Radial Velocity Method */}
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div className="bg-gray-900/20 rounded-2xl p-6 border border-gray-700 lg:order-1">
+                    <div className="bg-gray-800 rounded-lg p-4 h-64 flex flex-col items-center justify-center relative overflow-hidden">
+                      {/* Central Star with wobble animation */}
+                      <div className="relative">
+                        <div className="w-20 h-20 bg-gradient-to-br from-white to-gray-300 rounded-full animate-star-wobble shadow-lg"></div>
+                        
+                        {/* Orbiting Planet */}
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <div className="w-6 h-6 bg-gray-600 rounded-full animate-orbit"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Spectrum Display */}
+                      <div className="mt-6 w-full">
+                        <div className="text-xs text-gray-400 mb-2 text-center">Spectral Line Shift</div>
+                        <div className="h-4 w-full rounded animate-spectrum-shift"></div>
+                        <div className="flex justify-between text-xs text-gray-400 mt-1">
+                          <span>Blue Shift</span>
+                          <span>Red Shift</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="lg:order-2">
+                    <h4 className="text-3xl font-bold text-white mb-6">Radial Velocity Method</h4>
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6 mb-6">
+                      <p className="text-gray-300 text-lg">
+                        A planet's gravity tugs on its star, causing the star to wobble slightly. 
+                        This wobble changes the star's light spectrum, which we can measure 
+                        using the Doppler effect.
+                      </p>
+                    </div>
+                    <ul className="space-y-4 text-gray-300 text-lg">
+                      <li><strong className="text-white">Best For:</strong> Large planets close to their stars</li>
+                      <li><strong className="text-white">What We Learn:</strong> Planet mass and orbital characteristics</li>
+                      <li><strong className="text-white">Tools:</strong> High-precision spectrographs on ground telescopes</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Direct Imaging */}
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <h4 className="text-3xl font-bold text-white mb-6">Direct Imaging</h4>
+                    <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6 mb-6">
+                      <p className="text-gray-300 text-lg">
+                        Sometimes we can actually photograph exoplanets directly by blocking out 
+                        the star's light with a coronagraph. This is extremely challenging but 
+                        provides the most direct evidence.
+                      </p>
+                    </div>
+                    <ul className="space-y-3 text-gray-300">
+                      <li><strong className="text-white">Best For:</strong> Young, hot planets far from their stars</li>
+                      <li><strong className="text-white">What We Learn:</strong> Atmospheric composition and temperature</li>
+                      <li><strong className="text-white">Tools:</strong> Advanced ground telescopes with adaptive optics</li>
+                    </ul>
+                  </div>
+                  <div className="bg-gray-900/20 rounded-2xl p-6 border border-gray-700">
+                    <div className="bg-gray-800 rounded-lg p-4 h-64 flex items-center justify-center relative overflow-hidden">
+                      {/* Star being blocked */}
+                      <div className="absolute">
+                        <div className="w-24 h-24 bg-gradient-to-br from-white to-gray-300 rounded-full animate-star-block shadow-2xl"></div>
+                      </div>
+                      
+                      {/* Coronagraph disk */}
+                      <div className="absolute">
+                        <div className="w-16 h-16 bg-gray-900 border-2 border-white rounded-full animate-coronagraph flex items-center justify-center">
+                          <div className="text-xs text-white text-center">CORONAGRAPH</div>
+                        </div>
+                      </div>
+                      
+                      {/* Revealed exoplanet */}
+                      <div className="absolute top-8 right-8">
+                        <div className="w-4 h-4 bg-gray-400 rounded-full animate-planet-reveal shadow-lg"></div>
+                        <div className="text-xs text-gray-400 mt-1 animate-planet-reveal">Exoplanet!</div>
+                      </div>
+                      
+                      {/* Camera/Telescope indicator */}
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <div className="text-xs text-gray-400 text-center mt-1">Direct Imaging</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Types of Exoplanets */}
+          <section id="types" className="relative z-10 py-24 px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">Types of Exoplanets</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  Exoplanets come in amazing variety - some like planets in our solar system, 
+                  others completely alien to our experience.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center hover:border-white/30 transition-all">
+                  <div className="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Earth-like</h4>
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    Rocky planets similar in size to Earth, potentially in the habitable zone 
+                    where liquid water could exist.
+                  </p>
+                  <div className="text-sm text-gray-400 bg-gray-800/50 px-3 py-2 rounded">Example: Kepler-452b</div>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center hover:border-white/30 transition-all">
+                  <div className="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Gas Giants</h4>
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    Large planets composed mainly of gas, like Jupiter and Saturn. 
+                    Some are much larger than anything in our solar system.
+                  </p>
+                  <div className="text-sm text-gray-400 bg-gray-800/50 px-3 py-2 rounded">Example: HD 106906 b</div>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center hover:border-white/30 transition-all">
+                  <div className="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Hot Jupiters</h4>
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    Giant planets that orbit extremely close to their stars, with surface 
+                    temperatures hot enough to melt metal.
+                  </p>
+                  <div className="text-sm text-gray-400 bg-gray-800/50 px-3 py-2 rounded">Example: 51 Pegasi b</div>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center hover:border-white/30 transition-all">
+                  <div className="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-4">Super-Earths</h4>
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    Rocky planets larger than Earth but smaller than Neptune. 
+                    They're the most common type of exoplanet we've found.
+                  </p>
+                  <div className="text-sm text-gray-400 bg-gray-800/50 px-3 py-2 rounded">Example: Proxima Centauri b</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Future of Exoplanet Research */}
+          <section id="future" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-transparent">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">The Future of Exoplanet Discovery</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  Exciting new missions and technologies will revolutionize our understanding of exoplanets.
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-6">James Webb Space Telescope</h4>
+                  <p className="text-gray-300 mb-6 text-lg leading-relaxed">
+                    JWST can analyze exoplanet atmospheres in unprecedented detail, 
+                    searching for signs of water vapor, oxygen, and other biosignatures.
+                  </p>
+                  <div className="text-base text-white bg-green-900/30 border border-green-500/30 px-4 py-2 rounded-lg">Status: Active</div>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7l4-4m0 0l4 4m-4-4v18" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-6">Roman Space Telescope</h4>
+                  <p className="text-gray-300 mb-6 text-lg leading-relaxed">
+                    Will use gravitational microlensing to find exoplanets, including 
+                    free-floating planets and those in wide orbits.
+                  </p>
+                  <div className="text-base text-white bg-yellow-900/30 border border-yellow-500/30 px-4 py-2 rounded-lg">Launch: Mid-2020s</div>
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-6">Extremely Large Telescopes</h4>
+                  <p className="text-gray-300 mb-6 text-lg leading-relaxed">
+                    Ground-based telescopes with mirrors 30+ meters across will directly 
+                    image Earth-like exoplanets and study their atmospheres.
+                  </p>
+                  <div className="text-base text-white bg-blue-900/30 border border-blue-500/30 px-4 py-2 rounded-lg">Coming: 2030s</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Developer/Expert Section */}
+      {(userType === 'developer' || userType === null) && (
+        <>
+          {userType === 'developer' && (
+            <div className="fixed top-1/2 right-8 z-50 transform -translate-y-1/2">
+              <span
+                onClick={() => setUserType('beginner')}
+                className="inline-block text-xs text-gray-500 hover:text-white transition-all duration-300 cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-800/50"
+              >
+                Switch to Learning Mode
+              </span>
+            </div>
+          )}
 
       {/* Features Section */}
       <section id="features" className="relative z-10 py-24 px-8 bg-gradient-to-b from-transparent to-gray-900/30">
@@ -500,7 +1097,7 @@ pipeline.load_custom_query(query, destination="weaviate")`}</code>
           </div>
 
           <div className="bg-gradient-to-r from-gray-900/60 to-gray-800/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
-            <h4 className="text-3xl font-bold text-white mb-6 text-center">
+            <h4 className="text-4xl font-bold text-white mb-8 text-center">
               What Space Port Replaces
             </h4>
             <div className="grid md:grid-cols-2 gap-8">
@@ -633,13 +1230,13 @@ def run_pipeline():
                 TAP service calls, data transformation, validation, and database storage.
               </p>
             </div>              <div className="bg-gradient-to-r from-gray-900/40 to-gray-800/40 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-                <h4 className="text-xl font-bold text-white mb-4">🎯 Output Example</h4>
+                <h4 className="text-xl font-bold text-white mb-4">Output Example</h4>
                 <div className="font-mono text-sm text-gray-300 space-y-1">
-                  <div>🚀 Starting NASA exoplanet pipeline...</div>
+                  <div>Starting NASA exoplanet pipeline...</div>
                   <div>⏳ Running pipeline...</div>
                   <div>✅ Success! Processed 1 packages</div>
-                  <div>📊 Created tables: ['recent_discoveries']</div>
-                  <div className="mt-2 text-white">🪐 Recent Exoplanet Discoveries:</div>
+                  <div>Created tables: ['recent_discoveries']</div>
+                  <div className="mt-2 text-white">Recent Exoplanet Discoveries:</div>
                   <div className="ml-4 text-gray-400">
                     TOI-715 b (orbiting TOI-715, 2024)<br />
                     K2-415 b (orbiting K2-415, 2024)<br />
@@ -978,8 +1575,11 @@ def run_pipeline():
           </div>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 mb-8">
-            <button className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all">
-              🚀 Get Started Now
+            <button 
+              onClick={() => setShowSelection(true)}
+              className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
+            >
+              Get Started Now
             </button>
             <div className="flex gap-6 text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Documentation</a>
@@ -994,6 +1594,8 @@ def run_pipeline():
           </div>
         </div>
       </footer>
+        </>
+      )}
 
       {/* Chatbot */}
       <Chatbot />

@@ -190,11 +190,7 @@ html {
   }
 }
 
-/* Focus overlay for viewport center effect */
-#focus-overlay {
-  backdrop-filter: blur(0px);
-  transition: background 0.3s ease, backdrop-filter 0.3s ease;
-}
+
 
 /* Improved accessibility */
 @media (prefers-reduced-motion: reduce) {
@@ -204,9 +200,7 @@ html {
     animation: none !important;
   }
   
-  #focus-overlay {
-    transition: none !important;
-  }
+
 }
 
 /* Focus states for better accessibility */
@@ -230,4 +224,152 @@ a:focus {
   100% {
     background-position: 200% 0;
   }
+}
+
+/* Transit animation for exoplanet demonstrations */
+@keyframes transit {
+  0% {
+    transform: translateX(-150px);
+  }
+  50% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(150px);
+  }
+}
+
+@keyframes dip {
+  0%, 100% {
+    height: 4px;
+    opacity: 0;
+  }
+  50% {
+    height: 8px;
+    opacity: 1;
+  }
+}
+
+.animate-transit {
+  animation: transit 4s ease-in-out infinite;
+}
+
+.animate-dip {
+  animation: dip 4s ease-in-out infinite;
+}
+
+/* Fade in animation for modals */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Doppler Effect Animation - Star wobbling and spectrum shift */
+@keyframes star-wobble {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(0px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes spectrum-shift {
+  0%, 100% {
+    background: linear-gradient(90deg, #ff4444 0%, #4444ff 100%);
+  }
+  50% {
+    background: linear-gradient(90deg, #4444ff 0%, #ff4444 100%);
+  }
+}
+
+@keyframes orbit-planet {
+  0% {
+    transform: rotate(0deg) translateX(40px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg);
+  }
+}
+
+.animate-star-wobble {
+  animation: star-wobble 3s ease-in-out infinite;
+}
+
+.animate-spectrum-shift {
+  animation: spectrum-shift 3s ease-in-out infinite;
+}
+
+.animate-orbit {
+  animation: orbit-planet 6s linear infinite;
+}
+
+/* Direct Imaging Animation - Coronagraph blocking star light */
+@keyframes coronagraph-block {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes star-block {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.1;
+    filter: brightness(0.1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes planet-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-coronagraph {
+  animation: coronagraph-block 4s ease-in-out infinite;
+}
+
+.animate-star-block {
+  animation: star-block 4s ease-in-out infinite;
+}
+
+.animate-planet-reveal {
+  animation: planet-reveal 4s ease-in-out infinite 2s;
 }
