@@ -24,6 +24,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   line-height: 1.6;
+  zoom: 0.8; /* Set default zoom level to 80% */
 }
 
 /* Sophisticated space animations */
@@ -189,12 +190,22 @@ html {
   }
 }
 
+/* Focus overlay for viewport center effect */
+#focus-overlay {
+  backdrop-filter: blur(0px);
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
 /* Improved accessibility */
 @media (prefers-reduced-motion: reduce) {
   .exoplanet,
   .star,
   .gradient-text {
     animation: none !important;
+  }
+  
+  #focus-overlay {
+    transition: none !important;
   }
 }
 

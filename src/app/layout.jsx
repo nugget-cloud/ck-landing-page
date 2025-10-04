@@ -10,7 +10,11 @@ export const metadata = {
     description: 'Simplify NASA exoplanet data access with Space Port. Build queries, access TAP services, and migrate astronomical data with just a few lines of code.',
     type: 'website',
   },
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {

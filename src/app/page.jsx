@@ -23,42 +23,52 @@ export default function Page() {
         celestialObjects.style.transform = `translateY(${rateTwo}px)`;
       }
       
-      // Create focus zone with dimming above and below viewport
+      // Create vertical focus effect with dimming only on top and bottom
+      let focusOverlay = document.getElementById('focus-overlay');
+      if (!focusOverlay) {
+        focusOverlay = document.createElement('div');
+        focusOverlay.id = 'focus-overlay';
+        focusOverlay.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+          z-index: 15;
+          transition: background 0.2s ease;
+        `;
+        document.body.appendChild(focusOverlay);
+      }
+      
+      const viewportHeight = window.innerHeight;
+      
+      const focusAreaHeight = viewportHeight * 0.7; // 70% of viewport height for focus (increased)
+      const fadeHeight = viewportHeight * 0.1; // 15% fade zone on each side (reduced)
+      
+      const topFadeEnd = fadeHeight;
+      const focusStart = (viewportHeight - focusAreaHeight) / 2;
+      const focusEnd = focusStart + focusAreaHeight;
+      const bottomFadeStart = viewportHeight - fadeHeight;
+      
+      focusOverlay.style.background = `
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.4) 0%,
+          rgba(0, 0, 0, 0.2) ${(topFadeEnd / viewportHeight) * 100}%,
+          rgba(0, 0, 0, 0.05) ${(focusStart / viewportHeight) * 100}%,
+          transparent ${(focusStart + 20) / viewportHeight * 100}%,
+          transparent ${(focusEnd - 20) / viewportHeight * 100}%,
+          rgba(0, 0, 0, 0.05) ${(focusEnd / viewportHeight) * 100}%,
+          rgba(0, 0, 0, 0.2) ${(bottomFadeStart / viewportHeight) * 100}%,
+          rgba(0, 0, 0, 0.4) 100%
+        )
+      `;
+      
+      // Reset any section-based opacity changes
       const sections = document.querySelectorAll('section');
-      sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        
-        // Define focus zone - main viewport plus some buffer
-        const focusZoneTop = -viewportHeight * 0.2; // 20% above viewport
-        const focusZoneBottom = viewportHeight * 1.2; // 20% below viewport
-        
-        // Calculate section center position
-        const sectionCenter = rect.top + rect.height / 2;
-        
-        if (sectionCenter >= focusZoneTop && sectionCenter <= focusZoneBottom) {
-          // Section is in the focus zone - full brightness
-          section.style.opacity = 1;
-        } else {
-          // Section is outside focus zone - calculate dimming
-          let distanceFromFocusZone;
-          
-          if (sectionCenter < focusZoneTop) {
-            // Section is above focus zone
-            distanceFromFocusZone = focusZoneTop - sectionCenter;
-          } else {
-            // Section is below focus zone  
-            distanceFromFocusZone = sectionCenter - focusZoneBottom;
-          }
-          
-          // Apply gradual dimming based on distance from focus zone
-          const maxDimmingDistance = viewportHeight * 0.5;
-          const dimmingFactor = Math.min(distanceFromFocusZone / maxDimmingDistance, 1);
-          const minOpacity = 0.3;
-          const opacity = 1 - (dimmingFactor * (1 - minOpacity));
-          
-          section.style.opacity = Math.max(minOpacity, opacity);
-        }
+      sections.forEach(section => {
+        section.style.opacity = '';
       });
     };
 
@@ -314,11 +324,11 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
 
           <div className="bg-gradient-to-r from-gray-900/60 to-gray-800/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
             <h4 className="text-3xl font-bold text-white mb-6 text-center">
-              🎯 What Space Port Replaces
+              What Space Port Replaces
             </h4>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h5 className="text-xl font-bold text-red-400 mb-4">❌ Traditional Approach</h5>
+                <h5 className="text-xl font-bold text-white-400 mb-4">Traditional Approach</h5>
                 <ul className="space-y-3 text-gray-300">
                   <li>• Manual API authentication setup</li>
                   <li>• Complex HTTP request handling</li>
@@ -331,7 +341,7 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
                 </ul>
               </div>
               <div>
-                <h5 className="text-xl font-bold text-green-400 mb-4">✅ Space Port Approach</h5>
+                <h5 className="text-xl font-bold text-white-400 mb-4">Space Port Approach</h5>
                 <ul className="space-y-3 text-gray-300">
                   <li>• <code className="text-blue-300">NASAPipeline.for_local_development()</code></li>
                   <li>• <code className="text-purple-300">QueryBuilder().select().where()</code></li>
@@ -340,7 +350,7 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
                 </ul>
                 <div className="mt-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
                   <p className="text-green-300 font-medium">
-                    🚀 <strong>Result:</strong> 1000+ lines reduced to 10 lines of elegant Python
+                    <strong>Result:</strong> 1000+ lines reduced to 10 lines of elegant Python
                   </p>
                 </div>
               </div>
@@ -374,30 +384,14 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
                 <span className="ml-4 text-gray-400 text-sm font-mono">complete_pipeline_example.py</span>
               </div>
               <pre className="text-gray-300 font-mono text-sm leading-relaxed overflow-x-auto">
-                <code>{`#!/usr/bin/env python3
-"""
-A complete NASA Port data pipeline example.
-Demonstrates the three core steps:
-1. Import NASAPipeline
-2. Create pipeline instance  
-3. Execute with load_* method
-"""
-
-import sys
-from pathlib import Path
-import duckdb
-
-# Add src to Python path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-
+                <code>{`
+# Complete NASA Exoplanet Data Pipeline Example
 from nasa_port.data_bindings import NASAPipeline
 from nasa_port.builder.query_builder import QueryBuilder
 from nasa_port.builder.models import TableName
 
 def run_pipeline():
-    print("🚀 Starting NASA exoplanet pipeline...")
-    
-    # 1. Configure pipeline for local development
+    # 1. Configure pipeline
     db_path = Path("pipeline_output/discoveries.duckdb")
     db_path.parent.mkdir(parents=True, exist_ok=True)
     
@@ -418,33 +412,13 @@ def run_pipeline():
         .limit(10)
     )
     
-    # 3. Execute pipeline - handles everything automatically!
-    print("⏳ Running pipeline...")
     load_info = pipeline.load_custom_query(
         query=recent_planets_query,
         resource_name="recent_discoveries"
     )
     
-    print(f"✅ Success! Processed {len(load_info.load_packages)} packages")
-    
-    # 4. Query results from created database
-    with duckdb.connect(str(db_path), read_only=True) as con:
-        tables = con.execute("SHOW TABLES").fetchall()
-        print(f"📊 Created tables: {[t[0] for t in tables]}")
-        
-        if tables:
-            results = con.execute(
-                f"SELECT pl_name, hostname, disc_year "
-                f"FROM {tables[0][0]} LIMIT 5"
-            ).fetchall()
-            
-            print("\\n🪐 Recent Exoplanet Discoveries:")
-            for planet, host, year in results:
-                print(f"  {planet} (orbiting {host}, {year})")
-
-if __name__ == "__main__":
     run_pipeline()
-    print("\\n🎉 Pipeline complete!")`}</code>
+`}</code>
               </pre>
             </div>
 
