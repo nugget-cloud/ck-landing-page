@@ -10,9 +10,8 @@ export default function Page() {
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      const rateTwo = scrolled * -0.3;
-      const rateThree = scrolled * -0.1;
+      const rate = scrolled * -0.3; // Reduced parallax rate for smoother effect
+      const rateTwo = scrolled * -0.2;
       
       // Parallax effect on space background
       const spaceBg = document.getElementById('space-bg');
@@ -37,17 +36,17 @@ export default function Page() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Sophisticated Space Background */}
-      <div className="fixed inset-0 z-0" id="space-bg">
-        {/* Subtle starfield */}
-        {[...Array(150)].map((_, i) => (
+    <div className="main-container min-h-screen bg-transparent relative">
+      {/* Sophisticated Space Background - Fixed to cover entire page */}
+      <div className="fixed inset-0 w-full h-full z-[-1]" id="space-bg">
+        {/* Subtle starfield - distributed across full viewport */}
+        {[...Array(200)].map((_, i) => (
           <div
             key={i}
             className="subtle-star absolute bg-white rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              top: `${Math.random() * 200}%`, // Extended to cover more area when scrolling
               width: `${1 + Math.random() * 2}px`,
               height: `${1 + Math.random() * 2}px`,
               animationDelay: `${Math.random() * 3}s`,
@@ -56,18 +55,20 @@ export default function Page() {
           />
         ))}
 
-        {/* Nebula clouds */}
+        {/* Multiple nebula clouds for full page coverage */}
         <div className="nebula-cloud absolute top-1/4 right-1/3 w-80 h-80 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl"></div>
         <div className="nebula-cloud absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-to-tl from-gray-500/3 to-transparent rounded-full blur-3xl"></div>
+        <div className="nebula-cloud absolute top-3/4 right-1/5 w-72 h-72 bg-gradient-to-bl from-white/3 to-transparent rounded-full blur-3xl"></div>
+        <div className="nebula-cloud absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-tr from-gray-400/2 to-transparent rounded-full blur-3xl"></div>
 
-        {/* Floating particles */}
-        {[...Array(30)].map((_, i) => (
+        {/* More floating particles for extended coverage */}
+        {[...Array(50)].map((_, i) => (
           <div
             key={`particle-${i}`}
             className="space-particle"
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              top: `${Math.random() * 200}%`, // Extended coverage
               width: `${2 + Math.random() * 4}px`,
               height: `${2 + Math.random() * 4}px`,
               animationDelay: `${Math.random() * 12}s`,
@@ -77,13 +78,18 @@ export default function Page() {
         ))}
       </div>
 
-      {/* Subtle celestial objects */}
-      <div className="fixed inset-0 z-0 pointer-events-none" id="celestial-objects">
-        {/* Distant planet silhouettes */}
+      {/* Subtle celestial objects - also extended */}
+      <div className="fixed inset-0 w-full h-full z-[-1] pointer-events-none" id="celestial-objects">
+        {/* Distant planet silhouettes distributed throughout the page */}
         <div className="absolute top-1/5 right-1/6 w-24 h-24 rounded-full bg-white/10 blur-sm" style={{ animation: 'subtleFloat 15s ease-in-out infinite' }}></div>
         <div className="absolute top-2/3 left-1/8 w-16 h-16 rounded-full bg-gray-300/8 blur-sm" style={{ animation: 'subtleFloat 18s ease-in-out infinite -5s' }}></div>
         <div className="absolute top-1/2 right-1/2 w-12 h-12 rounded-full bg-white/5 blur-md" style={{ animation: 'subtleFloat 20s ease-in-out infinite -10s' }}></div>
+        <div className="absolute top-4/5 left-3/4 w-20 h-20 rounded-full bg-gray-400/6 blur-sm" style={{ animation: 'subtleFloat 17s ease-in-out infinite -8s' }}></div>
+        <div className="absolute top-1/3 left-1/5 w-14 h-14 rounded-full bg-white/8 blur-md" style={{ animation: 'subtleFloat 19s ease-in-out infinite -3s' }}></div>
       </div>
+
+      {/* Additional background layer to ensure continuity */}
+      <div className="fixed inset-0 w-full z-[-2] bg-black"></div>
 
       {/* Navigation Header */}
       <header className="relative z-20 flex justify-between items-center p-8">
@@ -94,11 +100,11 @@ export default function Page() {
         <nav className="hidden md:flex space-x-6 text-gray-300 text-sm">
           {userType === 'beginner' ? (
             <>
-              <a href="#what-are" className="hover:text-white transition-colors">What are Exoplanets</a>
-              <a href="#why-search" className="hover:text-white transition-colors">Why Search</a>
-              <a href="#how-find" className="hover:text-white transition-colors">How We Find</a>
-              <a href="#types" className="hover:text-white transition-colors">Types</a>
-              <a href="#future" className="hover:text-white transition-colors">Future</a>
+              <a href="#what-are" className="hover:text-white transition-colors text-sm">What are Exoplanets</a>
+              <a href="#why-search" className="hover:text-white transition-colors text-sm">Why Search</a>
+              <a href="#how-find" className="hover:text-white transition-colors text-sm">How We Find</a>
+              <a href="#types" className="hover:text-white transition-colors text-sm">Types</a>
+              <a href="#future" className="hover:text-white transition-colors text-sm">Future</a>
             </>
           ) : (
             <>
@@ -111,9 +117,22 @@ export default function Page() {
             </>
           )}
         </nav>
-        <button className="bg-white text-black px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg">
-          Get Started →
-        </button>
+        {userType && (
+          <button 
+            onClick={() => setUserType(userType === 'beginner' ? 'developer' : 'beginner')}
+            className="bg-white text-black px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
+          >
+            {userType === 'beginner' ? 'Switch to Developer →' : 'Switch to Learning →'}
+          </button>
+        )}
+        {!userType && (
+          <button 
+            onClick={() => setShowSelection(true)}
+            className="bg-white text-black px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
+          >
+            Get Started →
+          </button>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -181,42 +200,42 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
 
       {/* User Selection Modal */}
       {!userType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md starry-background">
-          <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-10 max-w-3xl mx-4 border border-gray-600 shadow-2xl animate-fade-in starry-background">
-            <h3 className="text-4xl font-bold text-white mb-8 text-center gradient-text">Choose Your Path</h3>
-            <p className="text-xl text-gray-300 text-center mb-10 leading-relaxed">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black starry-background">
+          <div className="bg-black p-6 max-w-xl mx-4 animate-fade-in starry-background">
+            <h3 className="text-2xl font-bold text-white mb-4 text-center">Choose Your Path</h3>
+            <p className="text-white text-center mb-6">
               Tell us about yourself so we can show you the most relevant content
             </p>
             
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-4">
               <button
                 onClick={() => setUserType('beginner')}
-                className="bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600 hover:border-white/30 text-white p-8 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+                className="text-white p-4 transition-all transform hover:scale-105 border border-white/20 hover:border-white/50"
               >
-                <div className="w-16 h-16 bg-gray-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
+                  <div className="text-left">
+                    <h4 className="text-lg font-bold">I'm New to Exoplanets</h4>
+                    <p className="text-white text-sm">Learn the basics and discover amazing worlds</p>
+                  </div>
                 </div>
-                <h4 className="text-2xl font-bold mb-4">I'm New to Exoplanets</h4>
-                <p className="text-gray-300 text-base leading-relaxed">
-                  Learn about exoplanets from the basics - what they are, why we search for them, and how they're discovered
-                </p>
               </button>
               
               <button
                 onClick={() => setUserType('developer')}
-                className="bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600 hover:border-white/30 text-white p-8 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+                className="text-white p-4 transition-all transform hover:scale-105 border border-white/20 hover:border-white/50"
               >
-                <div className="w-16 h-16 bg-gray-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center space-x-3">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                   </svg>
+                  <div className="text-left">
+                    <h4 className="text-lg font-bold">I'm a Developer/Researcher</h4>
+                    <p className="text-white text-sm">Access NASA data with powerful Python tools</p>
+                  </div>
                 </div>
-                <h4 className="text-2xl font-bold mb-4">I'm a Developer/Researcher</h4>
-                <p className="text-gray-300 text-base leading-relaxed">
-                  Access NASA's exoplanet data with our powerful Python pipeline and API tools
-                </p>
               </button>
             </div>
           </div>
@@ -226,16 +245,6 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
       {/* Beginner Learning Section */}
       {userType === 'beginner' && (
         <>
-          {/* Floating Navigation Controls */}
-          <div className="fixed top-1/2 right-8 z-50 transform -translate-y-1/2">
-            <span
-              onClick={() => setUserType('developer')}
-              className="inline-block text-xs text-gray-500 hover:text-white transition-all duration-300 cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-800/50"
-            >
-              Switch to Developer Mode
-            </span>
-          </div>
-
           {/* Sticky Progress Navigation */}
           <div className="sticky top-8 z-40 py-4 px-8">
             <div className="max-w-6xl mx-auto">
@@ -792,17 +801,6 @@ results = pipeline.load_custom_query(query, "recent_discoveries")`}</code>
       {/* Developer/Expert Section */}
       {(userType === 'developer' || userType === null) && (
         <>
-          {userType === 'developer' && (
-            <div className="fixed top-1/2 right-8 z-50 transform -translate-y-1/2">
-              <span
-                onClick={() => setUserType('beginner')}
-                className="inline-block text-xs text-gray-500 hover:text-white transition-all duration-300 cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-800/50"
-              >
-                Switch to Learning Mode
-              </span>
-            </div>
-          )}
-
       {/* Features Section */}
       <section id="features" className="relative z-10 py-24 px-8 bg-gradient-to-b from-transparent to-gray-900/30">
         <div className="max-w-7xl mx-auto">
@@ -1575,12 +1573,6 @@ def run_pipeline():
           </div>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 mb-8">
-            <button 
-              onClick={() => setShowSelection(true)}
-              className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
-            >
-              Get Started Now
-            </button>
             <div className="flex gap-6 text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Documentation</a>
               <a href="#" className="hover:text-white transition-colors">GitHub</a>
