@@ -9,7 +9,7 @@ export default function Chatbot() {
     {
       role: 'assistant',
       content:
-        "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data pipelines, query building, and any questions about our library. How can I assist you today?",
+        "Hi! I'm you Space Port assistant. I can help you with NASA exoplanet data pipelines, query building, and any questions about our library. How can I assist you today?",
     },
   ]);
   const [input, setInput] = useState('');
