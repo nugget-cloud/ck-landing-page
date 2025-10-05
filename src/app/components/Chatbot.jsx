@@ -11,7 +11,7 @@ export default function Chatbot() {
     {
       role: 'assistant',
       content:
-        "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data pipelines, query building, and any questions about our library. How can I assist you today?",
+        "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data, and also provide your date of birth to see your relation with exoplanets. How can I assist you today?",
     },
   ]);
 
@@ -39,7 +39,6 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Scroll when messages change in the active tab
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages, statsMessages, queryBuilder, activeTab]);
@@ -49,12 +48,10 @@ export default function Chatbot() {
     if (!input.trim() || isLoading) return;
 
     const userMessage = { role: 'user', content: input };
-
-    // Determine which conversation to update
     let setMessages;
-      if (activeTab === 'chat') setMessages = setChatMessages;
-      else if (activeTab === 'stats') setMessages = setStatsMessages;
-      else if (activeTab === 'query') setMessages = setQueryBuilder;
+    if (activeTab === 'chat') setMessages = setChatMessages;
+    else if (activeTab === 'stats') setMessages = setStatsMessages;
+    else if (activeTab === 'query') setMessages = setQueryBuilder;
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
@@ -92,7 +89,6 @@ export default function Chatbot() {
     }
   };
 
-  // Helper to render messages for current tab
   const renderMessages = (messages) => (
     <>
       {messages.map((message, index) => (
@@ -148,6 +144,22 @@ export default function Chatbot() {
       <div ref={messagesEndRef} />
     </>
   );
+
+  // Sample queries
+  const sampleQueries = {
+    chat: [
+      "Tell me a fun fact about exoplanets",
+      "Explain Kepler mission in simple terms"
+    ],
+    stats: [
+      "Number of exoplanets with radius > 2 Earth radii",
+      "Average orbital period of confirmed planets"
+    ],
+    query: [
+      "Fetch the names of all exoplanets discovered by Kepler",
+      "Fetch the top 10 nearest exoplanets to Earth"
+    ]
+  };
 
   return (
     <>
@@ -223,9 +235,32 @@ export default function Chatbot() {
             {activeTab === 'query' && renderMessages(queryBuilder)}
           </div>
 
+          {/* Sample Queries */}
+          <div className="px-6 pb-2">
+            <h4 className="text-gray-400 text-xs mb-1">Sample Queries:</h4>
+            <div className="flex flex-wrap gap-2">
+              {sampleQueries[activeTab].map((q, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setInput(q);
+                    setTimeout(() => document.getElementById('chatForm')?.requestSubmit(), 100);
+                  }}
+                  className="px-3 py-1 bg-gray-700 text-white rounded-lg hover:bg-gray-600 text-xs transition-all"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Input Area */}
           {(activeTab === 'chat' || activeTab === 'stats' || activeTab == 'query') && (
-            <form onSubmit={sendMessage} className="p-6 border-t border-white/10 bg-black/50">
+            <form
+              id="chatForm"
+              onSubmit={sendMessage}
+              className="p-6 border-t border-white/10 bg-black/50"
+            >
               <div className="flex space-x-3 items-end">
                 <div className="flex-1 relative">
                   <input
