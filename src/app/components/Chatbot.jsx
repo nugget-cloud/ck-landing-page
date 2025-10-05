@@ -163,7 +163,7 @@ export default function Chatbot() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about NASA pipelines, queries, or data migration..."
-                  className="w-full px-4 py-3 bg-gray-900/80 text-white border border-white/20 rounded-xl focus:outline-none focus:border-white/40 focus:bg-gray-900 transition-all placeholder-gray-500 text-sm"
+                  className="w-full px-4 py-3 bg-gray-900/80 text-white border border-gray-600 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-gray-900 transition-all placeholder-gray-500 text-sm"
                   disabled={isLoading}
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs">

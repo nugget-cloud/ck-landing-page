@@ -180,13 +180,11 @@ export default function Page() {
             </>
           ) : (
             <>
+              <a href="#prediction" className="hover:text-white transition-colors">AI Model</a>
               <a href="#features" className="hover:text-white transition-colors">Features</a>
               <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
               <a href="#docs" className="hover:text-white transition-colors">Documentation</a>
               <a href="#examples" className="hover:text-white transition-colors">Examples</a>
-              <a href="#prediction" className="hover:text-white transition-colors">AI Model</a>
-              <a href="#community" className="hover:text-white transition-colors">Community</a>
-              <a href="#models" className="hover:text-white transition-colors">Models</a>
             </>
           )}
         </nav>
@@ -827,13 +825,167 @@ export default function Page() {
       {/* Developer/Expert Section */}
       {(userType === 'developer' || userType === null) && (
         <>
-      {/* Features Section */}
+
+      {/* Developer Tools & SDKs Section */}
       <section id="features" className="relative z-10 py-24 px-8 bg-gradient-to-b from-transparent to-gray-900/30">
         <div className="max-w-7xl mx-auto">
-          <h3 className="text-5xl font-bold text-center text-white mb-16">
-            Powerful <span className="gradient-text">Features</span>
-          </h3>
-          
+          <div className="text-center mb-16">
+            <h3 className="text-5xl font-bold text-white mb-6">
+              Developer <span className="gradient-text">Tools & Solutions</span>
+            </h3>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12">
+              We provide comprehensive tools for developers and researchers to access NASA's exoplanet data. 
+              Whether you need powerful Python SDKs or ready-to-use machine learning models, we have you covered.
+            </p>
+          </div>
+
+          {/* Main Offerings */}
+          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+            {/* Python SDK */}
+            <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-white/30 transition-all">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-white rounded-xl mr-4 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-3xl font-bold text-white">Python SDK</h4>
+                  <p className="text-gray-400 text-lg">For building and maintaining data pipelines</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-300 text-lg leading-relaxed mb-8">
+                Our comprehensive Python SDK transforms complex NASA exoplanet data access into elegant, 
+                maintainable code. Build robust data pipelines that can scale from prototype to production 
+                with minimal configuration and maximum flexibility.
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">Intuitive Query Builder</h5>
+                    <p className="text-gray-400 text-sm">Method chaining for complex ADQL queries without SQL expertise</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">30+ Data Destinations</h5>
+                    <p className="text-gray-400 text-sm">Load data into any database, warehouse, or storage system</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">Production-Ready Architecture</h5>
+                    <p className="text-gray-400 text-sm">Built-in error handling, retry logic, and pipeline monitoring</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-800/60 rounded-lg p-4 border border-gray-700">
+                <pre className="text-gray-300 font-mono text-sm leading-relaxed overflow-x-auto">
+                  <code>{`# Simple 3-line pipeline setup
+pipeline = NASAPipeline.for_production()
+query = QueryBuilder().select_habitable_planets()
+pipeline.load_custom_query(query, "bigquery")`}</code>
+                </pre>
+              </div>
+            </div>
+
+            {/* Out-of-the-box ML Models */}
+            <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-white/30 transition-all relative">
+              <button
+                onClick={() => document.getElementById('prediction').scrollIntoView({ behavior: 'smooth' })}
+                className="absolute top-4 right-4 bg-white text-black px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Try it out →
+              </button>
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl mr-4 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-3xl font-bold text-white">ML Models</h4>
+                  <p className="text-gray-400 text-lg">Ready-to-use machine learning inference</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-300 text-lg leading-relaxed mb-8">
+                Access pre-trained machine learning models for exoplanet research without the complexity 
+                of model training or deployment. Run inference on astronomical data with simple API calls 
+                and get instant, scientifically-validated predictions.
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">Exoplanet Classification</h5>
+                    <p className="text-gray-400 text-sm">Predict if celestial objects are confirmed exoplanets</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">REST API Integration</h5>
+                    <p className="text-gray-400 text-sm">Simple HTTP endpoints for any programming language</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mt-1">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="text-white font-semibold">NASA-Trained Models</h5>
+                    <p className="text-gray-400 text-sm">Models trained on official NASA Exoplanet Archive data</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-800/60 rounded-lg p-4 border border-gray-700">
+                <pre className="text-gray-300 font-mono text-sm leading-relaxed overflow-x-auto">
+                  <code>{`# Instant ML inference
+response = requests.post("/api/predict", {
+  "pl_orbper": 365.25, "pl_rade": 1.0
+})
+print(response.json()["prediction"])`}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+
+          {/* Technical Features Grid */}
           <div className="feature-grid grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
             {/* Query Builder */}
             <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
@@ -848,7 +1000,7 @@ export default function Page() {
                 Chain methods to create sophisticated ADQL queries without writing raw SQL.
               </p>
               <div className="mt-6 code-block rounded p-4">
-                <code className="text-sm text-blue-300 font-mono">
+                <code className="text-sm text-green-300 font-mono">
                   {`query.select(['pl_name', 'sy_dist'])
     .where_confirmed()
     .order_by('disc_year')`}
@@ -890,9 +1042,9 @@ export default function Page() {
                 Configure once, migrate thousands of records with built-in error handling.
               </p>
               <div className="mt-6 code-block rounded p-4">
-                <code className="text-sm text-green-300 font-mono">
+                <code className="text-sm text-gray-300 font-mono">
                   {`pipeline.load_custom_query(
-    query, destination="bigquery" // 30+ destinations!
+    query, destination="bigquery"
 )`}
                 </code>
               </div>
@@ -1063,7 +1215,6 @@ pipeline.load_custom_query(query, destination="weaviate")`}</code>
             </div>
           </div>
 
-          {/* Destination Configuration Example */}
           <div className="text-center">
             <p className="text-gray-300 mb-6">
               Change destinations without changing your pipeline logic - just update the configuration!
@@ -1077,7 +1228,6 @@ pipeline.load_custom_query(query, destination="weaviate")`}</code>
         </div>
       </section>
 
-      {/* Documentation Section */}
       <section id="docs" className="relative z-10 py-24 px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -1274,15 +1424,12 @@ def run_pipeline():
         </div>
       </section>
 
-      {/* Community Section */}
-      
-
-      {/* Exoplanet Prediction Model Section */}
-      <section id="prediction" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/20 to-gray-900/30">
+      {/* AI-Powered Exoplanet Prediction Section - MOVED TO BOTTOM */}
+      <section id="prediction" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-gray-900/60">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-5xl font-bold text-white mb-6">
-              Exoplanet <span className="gradient-text">Prediction Model</span>
+              AI-Powered <span className="gradient-text">Exoplanet Prediction</span>
             </h3>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
               Use our trained machine learning model to predict whether a celestial object is a confirmed exoplanet 
@@ -1317,7 +1464,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_orbper}
                         onChange={(e) => handlePredictionInputChange('pl_orbper', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 365.25"
                       />
                     </div>
@@ -1331,7 +1478,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_rade}
                         onChange={(e) => handlePredictionInputChange('pl_rade', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1345,7 +1492,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_bmasse}
                         onChange={(e) => handlePredictionInputChange('pl_bmasse', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1359,7 +1506,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_dens}
                         onChange={(e) => handlePredictionInputChange('pl_dens', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 5.51"
                       />
                     </div>
@@ -1373,7 +1520,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_orbsmax}
                         onChange={(e) => handlePredictionInputChange('pl_orbsmax', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1387,7 +1534,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_orbeccen}
                         onChange={(e) => handlePredictionInputChange('pl_orbeccen', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 0.017"
                       />
                     </div>
@@ -1407,7 +1554,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_insol}
                         onChange={(e) => handlePredictionInputChange('pl_insol', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1421,7 +1568,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.pl_eqt}
                         onChange={(e) => handlePredictionInputChange('pl_eqt', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 255"
                       />
                     </div>
@@ -1435,7 +1582,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.st_teff}
                         onChange={(e) => handlePredictionInputChange('st_teff', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 5778"
                       />
                     </div>
@@ -1449,7 +1596,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.st_rad}
                         onChange={(e) => handlePredictionInputChange('st_rad', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1463,7 +1610,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.st_mass}
                         onChange={(e) => handlePredictionInputChange('st_mass', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 1.0"
                       />
                     </div>
@@ -1477,7 +1624,7 @@ def run_pipeline():
                         step="0.01"
                         value={predictionData.st_logg}
                         onChange={(e) => handlePredictionInputChange('st_logg', e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-400"
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-gray-400"
                         placeholder="e.g. 4.44"
                       />
                     </div>
@@ -1489,11 +1636,11 @@ def run_pipeline():
                 <button
                   onClick={submitPrediction}
                   disabled={isLoadingPrediction}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
+                  className="w-full bg-white text-black py-3 px-6 rounded-lg font-medium hover:bg-gray-200 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
                 >
                   {isLoadingPrediction ? (
                     <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
