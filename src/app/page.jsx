@@ -277,7 +277,7 @@ Discover and explore exoplanets effortlessly with AI-powered detection, interact
       {userType === 'beginner' && (
         <>
           {/* Sticky Progress Navigation */}
-          <StickyNav />
+          {/* <StickyNav /> */}
 
           {/* Learning Hero */}
           <section className="relative z-10 py-24 px-8 text-center">
@@ -995,6 +995,15 @@ Discover and explore exoplanets effortlessly with AI-powered detection, interact
                 </div>
               </div>
             </div>
+            <br/>
+            <div className="max-w-7xl mx-auto">
+              <iframe
+                src="https://nasa-exoplanet-plot.onrender.com/"
+                width="100%"
+                height="600px"
+                frameborder="0"
+                allowfullscreen>
+              </iframe></div>
           </section>
         </>
       )}
