@@ -5,13 +5,32 @@ import { useState, useRef, useEffect } from 'react';
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('chat'); // 'chat', 'stats', 'query'
-  const [messages, setMessages] = useState([
+
+  // 🧩 Separate message states
+  const [chatMessages, setChatMessages] = useState([
     {
       role: 'assistant',
       content:
         "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data pipelines, query building, and any questions about our library. How can I assist you today?",
     },
   ]);
+
+  const [statsMessages, setStatsMessages] = useState([
+    {
+      role: 'assistant',
+      content:
+        "Welcome to Exoplanet Stats! I can fetch and explain key statistics about exoplanets, like detection methods, radius, or host stars. What would you like to know?",
+    },
+  ]);
+
+  const [queryBuilder, setQueryBuilder] = useState([
+    {
+      role: 'assistant',
+      content:
+        "Welcome to Exoplanet Query Builder! I can help you construct dataset filters or SQL-like queries to explore exoplanet data. What would you like to build?",
+    },
+  ]);
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -20,15 +39,23 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Scroll when messages change in the active tab
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [chatMessages, statsMessages, queryBuilder, activeTab]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
     const userMessage = { role: 'user', content: input };
+
+    // Determine which conversation to update
+    let setMessages;
+      if (activeTab === 'chat') setMessages = setChatMessages;
+      else if (activeTab === 'stats') setMessages = setStatsMessages;
+      else if (activeTab === 'query') setMessages = setQueryBuilder;
+
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -39,13 +66,17 @@ export default function Chatbot() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: input,
-          context: 'Space Port - NASA Exoplanet Data Pipeline Library',
+          context: activeTab,
         }),
       });
 
       if (!response.ok) throw new Error('Failed to get response');
       const data = await response.json();
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.response }]);
+
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.response },
+      ]);
     } catch (error) {
       console.error('Chat error:', error);
       setMessages((prev) => [
@@ -53,7 +84,7 @@ export default function Chatbot() {
         {
           role: 'assistant',
           content:
-            "I apologize, but I'm having trouble connecting right now. Please try again or check our documentation for help with Space Port.",
+            "I’m having trouble connecting right now. Please try again or check the documentation.",
         },
       ]);
     } finally {
@@ -61,9 +92,66 @@ export default function Chatbot() {
     }
   };
 
+  // Helper to render messages for current tab
+  const renderMessages = (messages) => (
+    <>
+      {messages.map((message, index) => (
+        <div
+          key={index}
+          className={`flex ${
+            message.role === 'user' ? 'justify-end' : 'justify-start'
+          } items-end space-x-2`}
+        >
+          {message.role === 'assistant' && (
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
+              <span className="text-black text-xs font-bold">SP</span>
+            </div>
+          )}
+          <div
+            className={`max-w-[75%] p-4 rounded-2xl ${
+              message.role === 'user'
+                ? 'bg-white text-black rounded-br-lg'
+                : 'bg-gray-800/80 text-white border border-white/10 rounded-bl-lg'
+            } shadow-lg`}
+          >
+            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+              {message.content}
+            </p>
+          </div>
+          {message.role === 'user' && (
+            <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
+              <span className="text-white text-xs font-bold">U</span>
+            </div>
+          )}
+        </div>
+      ))}
+      {isLoading && (
+        <div className="flex justify-start items-end space-x-2">
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
+            <span className="text-black text-xs font-bold">SP</span>
+          </div>
+          <div className="bg-gray-800/80 text-white p-4 rounded-2xl rounded-bl-lg border border-white/10 shadow-lg">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+              <div
+                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                style={{ animationDelay: '0.1s' }}
+              ></div>
+              <div
+                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                style={{ animationDelay: '0.2s' }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div ref={messagesEndRef} />
+    </>
+  );
+
   return (
     <>
-      {/* Chatbot Toggle Button */}
+      {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-white text-black rounded-full shadow-lg hover:bg-gray-200 transition-all transform hover:scale-110 flex items-center justify-center"
@@ -105,14 +193,6 @@ export default function Chatbot() {
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
           </div>
 
           {/* Tabs */}
@@ -136,79 +216,15 @@ export default function Chatbot() {
             ))}
           </div>
 
-          {/* Content Area */}
+          {/* Content */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-black to-gray-900/30">
-            {activeTab === 'chat' && (
-              <>
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${
-                      message.role === 'user' ? 'justify-end' : 'justify-start'
-                    } items-end space-x-2`}
-                  >
-                    {message.role === 'assistant' && (
-                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
-                        <span className="text-black text-xs font-bold">SP</span>
-                      </div>
-                    )}
-                    <div
-                      className={`max-w-[75%] p-4 rounded-2xl ${
-                        message.role === 'user'
-                          ? 'bg-white text-black rounded-br-lg'
-                          : 'bg-gray-800/80 text-white border border-white/10 rounded-bl-lg'
-                      } shadow-lg`}
-                    >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                    </div>
-                    {message.role === 'user' && (
-                      <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
-                        <span className="text-white text-xs font-bold">U</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start items-end space-x-2">
-                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mb-1">
-                      <span className="text-black text-xs font-bold">SP</span>
-                    </div>
-                    <div className="bg-gray-800/80 text-white p-4 rounded-2xl rounded-bl-lg border border-white/10 shadow-lg">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: '0.1s' }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: '0.2s' }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </>
-            )}
-
-            {activeTab === 'stats' && (
-              <div className="text-gray-300 text-sm space-y-3">
-                <p>📊 Here you can view summarized exoplanet data, charts, and trends.</p>
-                <p>(Coming soon — will fetch data from NASA Exoplanet Archive.)</p>
-              </div>
-            )}
-
-            {activeTab === 'query' && (
-              <div className="text-gray-300 text-sm space-y-3">
-                <p>🧠 Use this section to build dataset filters or SQL-like queries interactively.</p>
-                <p>(Future feature — integrate with Space Port backend routes.)</p>
-              </div>
-            )}
+            {activeTab === 'chat' && renderMessages(chatMessages)}
+            {activeTab === 'stats' && renderMessages(statsMessages)}
+            {activeTab === 'query' && renderMessages(queryBuilder)}
           </div>
 
-          {/* Input Area (only for Chat Tab) */}
-          {activeTab === 'chat' && (
+          {/* Input Area */}
+          {(activeTab === 'chat' || activeTab === 'stats' || activeTab == 'query') && (
             <form onSubmit={sendMessage} className="p-6 border-t border-white/10 bg-black/50">
               <div className="flex space-x-3 items-end">
                 <div className="flex-1 relative">
@@ -216,13 +232,14 @@ export default function Chatbot() {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask about NASA pipelines, queries, or data migration..."
+                    placeholder={
+                      activeTab === 'chat'
+                        ? 'Ask about NASA pipelines, queries, or data migration...'
+                        : 'Ask about exoplanet trends, detections, or discoveries...'
+                    }
                     className="w-full px-4 py-3 bg-gray-900/80 text-white border border-white/20 rounded-xl focus:outline-none focus:border-white/40 focus:bg-gray-900 transition-all placeholder-gray-500 text-sm"
                     disabled={isLoading}
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs">
-                    {input.length}/500
-                  </div>
                 </div>
                 <button
                   type="submit"
@@ -245,7 +262,9 @@ export default function Chatbot() {
                   )}
                 </button>
               </div>
-              <p className="text-gray-500 text-xs mt-2">Press Enter to send • AI responses may take a moment</p>
+              <p className="text-gray-500 text-xs mt-2">
+                Press Enter to send • AI responses may take a moment
+              </p>
             </form>
           )}
         </div>
