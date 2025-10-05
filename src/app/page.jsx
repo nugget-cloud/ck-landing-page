@@ -9,6 +9,7 @@ export default function Page() {
   const [userType, setUserType] = useState(null); 
   const [showSelection, setShowSelection] = useState(true);
   const [showAR, setShowAR] = useState(false);
+  const [activeTab, setActiveTab] = useState("input");
 
   const handleARClick = () => {
     setShowAR(!showAR);
@@ -30,7 +31,7 @@ export default function Page() {
     st_logg: ''        // Stellar Surface Gravity (log g)
   });
   const [predictionResult, setPredictionResult] = useState(null);
-  const [isLoadingPrediction, setIsfingPrediction] = useState(false);
+  const [isLoadingPrediction, setIsLoadingPrediction] = useState(false);
   const [predictionError, setPredictionError] = useState(null);
 
   // Handle prediction form input changes
@@ -1182,6 +1183,33 @@ print(response.json()["prediction"])`}</code>
                 </p>
               </div>
 
+                  <div className="mb-8">
+                    <div className="flex border-b border-gray-700">
+                      <button
+                        onClick={() => setActiveTab("input")}
+                        className={`px-6 py-3 font-medium ${activeTab === "input" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Model Input Parameters
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("batch")}
+                        className={`px-6 py-3 font-medium ${activeTab === "batch" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Batch Analysis
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("hyper")}
+                        className={`px-6 py-3 font-medium ${activeTab === "hyper" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Hyperparameter Tuning
+                      </button>
+                    </div>
+                  </div>
+        <div>
+          {activeTab === "input" && (
               <div className="grid lg:grid-cols-2 gap-12">
                 {/* Input Form */}
                 <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
@@ -1479,6 +1507,22 @@ print(response.json()["prediction"])`}</code>
                           <p><strong className="text-white">Features:</strong> 12 planetary and stellar parameters</p>
                           <p><strong className="text-white">Prediction:</strong> Binary classification (Planet/Not Planet)</p>
                         </div>
+                        <br/>
+                        <h5 className="text-lg font-bold text-white mb-3">Model Metrics</h5>
+                            <div className="text-sm text-gray-300 grid grid-cols-2 gap-2">
+                              <p>
+                                <strong className="text-white">Accuracy:</strong> 86.93%
+                              </p>
+                              <p>
+                                <strong className="text-white">Precision:</strong> 0.894
+                              </p>
+                              <p>
+                                <strong className="text-white">Recall:</strong> 0.954
+                              </p>
+                              <p>
+                                <strong className="text-white">F1 Score:</strong> {/* Add value here */}
+                              </p>
+                            </div>
                       </div>
                     </div>
                   )}
@@ -1498,7 +1542,29 @@ print(response.json()["prediction"])`}</code>
                     </div>
                   )}
                 </div>
+                </div>
+          )}
+          {activeTab === "batch" && (
+            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+              <h4 className="text-2xl font-bold text-white mb-6">Batch Analysis</h4>
+              <p className="text-gray-300">
+                Upload CSV or input multiple data points to get batch predictions for multiple celestial objects.
+              </p>
+              {/* Add your batch processing form/table here */}
+            </div>
+          )}
+
+          {activeTab === "hyper" && (
+            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+              <h4 className="text-2xl font-bold text-white mb-6">Hyperparameter Tuning</h4>
+              <p className="text-gray-300">
+                Adjust hyperparameters of the machine learning model and see their effect on prediction performance.
+              </p>
+              {/* Add hyperparameter tuning controls here */}
+            </div>
+          )}
               </div>
+            
             </div>
           </section>
 
