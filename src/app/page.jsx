@@ -6,6 +6,11 @@ import Chatbot from './components/Chatbot';
 export default function Page() {
   const [userType, setUserType] = useState(null); 
   const [showSelection, setShowSelection] = useState(true);
+  const [showAR, setShowAR] = useState(false);
+
+  const handleARClick = () => {
+    setShowAR(!showAR);
+  };
   
   // Prediction model state
   const [predictionData, setPredictionData] = useState({
@@ -177,6 +182,7 @@ export default function Page() {
               <a href="#how-find" className="hover:text-white transition-colors text-sm">How We Find</a>
               <a href="#types" className="hover:text-white transition-colors text-sm">Types</a>
               <a href="#future" className="hover:text-white transition-colors text-sm">Future</a>
+              <a href="#AR" className="hover:text-white transition-colors text-sm">AR</a>
             </>
           ) : (
             <>
@@ -315,6 +321,14 @@ export default function Page() {
                 >
                   <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
                   <span className="text-gray-300 text-base font-medium">Future</span>
+                </button>
+                <div className="w-12 h-0.5 bg-gray-500"></div>
+                <button
+                  onClick={() => document.getElementById('AR').scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full hover:bg-gray-700/50 transition-all duration-300 transform hover:scale-105"
+                >
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-bold">6</div>
+                  <span className="text-gray-300 text-base font-medium">AR</span>
                 </button>
               </div>
             </div>
@@ -817,6 +831,222 @@ export default function Page() {
                     image Earth-like exoplanets and study their atmospheres.
                   </p>
                   <div className="text-base text-white bg-blue-900/30 border border-blue-500/30 px-4 py-2 rounded-lg">Coming: 2030s</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="AR" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/30 to-transparent">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h3 className="text-4xl font-bold text-white mb-6">Popular Exoplanets 3D Models</h3>
+                <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+                  Rotate and zoom in on these interactive models of famous exoplanets.
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <h4 className="text-2xl font-bold text-white mb-6">Kepler-22b</h4>
+                  {/* <p className="text-gray-300 mb-6 text-lg leading-relaxed">
+                    JWST can analyze exoplanet atmospheres in unprecedented detail, 
+                    searching for signs of water vapor, oxygen, and other biosignatures.
+                  </p> */}
+                  <div className="sketchfab-embed-wrapper">
+                    <iframe
+                      title="Kepler 22b"
+                      allowFullScreen
+                      mozallowfullscreen="true"
+                      webkitallowfullscreen="true"
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
+                      xr-spatial-tracking="true"
+                      execution-while-out-of-viewport="true"
+                      execution-while-not-rendered="true"
+                      web-share="true"
+                      src="https://sketchfab.com/models/3589154676b7465c815a4aa1d8c4354a/embed"
+                      width="100%"
+                      height="400"
+                      style={{ border: "none" }}
+                    ></iframe>
+
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "normal",
+                        margin: "5px",
+                        color: "#4A4A4A",
+                      }}
+                    >
+                      <a
+                        href="https://sketchfab.com/3d-models/kepler-22b-3589154676b7465c815a4aa1d8c4354a?utm_medium=embed&utm_campaign=share-popup&utm_content=3589154676b7465c815a4aa1d8c4354a"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Kepler 22b
+                      </a>{" "}
+                      by{" "}
+                      <a
+                        href="https://sketchfab.com/per.rb1?utm_medium=embed&utm_campaign=share-popup&utm_content=3589154676b7465c815a4aa1d8c4354a"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        per.rb1
+                      </a>{" "}
+                      on{" "}
+                      <a
+                        href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=3589154676b7465c815a4aa1d8c4354a"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Sketchfab
+                      </a>
+                    </p>
+                  </div>
+                  {/* AR Button */}
+                  <button
+                    onClick={handleARClick}
+                    style={{
+                      marginTop: "10px",
+                      padding: "8px 16px",
+                      backgroundColor: "#1CAAD9",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {showAR ? "Hide AR Marker" : "View in AR"}
+                  </button>
+
+                  {/* Hiro Marker */}
+                  {showAR && (
+                    <div style={{ marginTop: "10px", textAlign: "center" }}>
+                      <img
+                        src="/Hiro-marker.png"
+                        alt="Hiro Marker for AR"
+                        style={{ maxWidth: "300px", width: "100%" }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <h4 className="text-2xl font-bold text-white mb-6">Kepler 186f</h4>
+                  <div className="sketchfab-embed-wrapper">
+                    <iframe
+                      title="Kepler-186f"
+                      allowFullScreen
+                      mozallowfullscreen="true"
+                      webkitallowfullscreen="true"
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
+                      xr-spatial-tracking="true"
+                      execution-while-out-of-viewport="true"
+                      execution-while-not-rendered="true"
+                      web-share="true"
+                      src="https://sketchfab.com/models/c484b8b4aa9248b6998b6222d62f5a77/embed"
+                      width="100%"
+                      height="400"
+                      style={{ border: "none" }}
+                    ></iframe>
+
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "normal",
+                        margin: "5px",
+                        color: "#4A4A4A",
+                      }}
+                    >
+                      <a
+                        href="https://sketchfab.com/3d-models/kepler-186f-c484b8b4aa9248b6998b6222d62f5a77"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Kepler-186f
+                      </a>{" "}
+                      by{" "}
+                      <a
+                        href="https://sketchfab.com/uperesito"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        uperesito
+                      </a>{" "}
+                      on{" "}
+                      <a
+                        href="https://sketchfab.com"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Sketchfab
+                      </a>
+                    </p>
+                  </div>
+
+                </div>
+
+                <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
+                  <h4 className="text-2xl font-bold text-white mb-6">Kepler 452b</h4>
+                  <div className="sketchfab-embed-wrapper">
+                    <iframe
+                      title="Kepler - 452b Planet"
+                      allowFullScreen
+                      mozallowfullscreen="true"
+                      webkitallowfullscreen="true"
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
+                      xr-spatial-tracking="true"
+                      execution-while-out-of-viewport="true"
+                      execution-while-not-rendered="true"
+                      web-share="true"
+                      src="https://sketchfab.com/models/8310c4ebc8c642feaba50996911f80e9/embed"
+                      width="100%"
+                      height="400"
+                      style={{ border: "none" }}
+                    ></iframe>
+
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "normal",
+                        margin: "5px",
+                        color: "#4A4A4A",
+                      }}
+                    >
+                      <a
+                        href="https://sketchfab.com/3d-models/kepler-452b-planet-8310c4ebc8c642feaba50996911f80e9?utm_medium=embed&utm_campaign=share-popup&utm_content=8310c4ebc8c642feaba50996911f80e9"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Kepler - 452b Planet
+                      </a>{" "}
+                      by{" "}
+                      <a
+                        href="https://sketchfab.com/ahnaf.yasintx?utm_medium=embed&utm_campaign=share-popup&utm_content=8310c4ebc8c642feaba50996911f80e9"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Ahnaf Yasin
+                      </a>{" "}
+                      on{" "}
+                      <a
+                        href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=8310c4ebc8c642feaba50996911f80e9"
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        style={{ fontWeight: "bold", color: "#1CAAD9" }}
+                      >
+                        Sketchfab
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
