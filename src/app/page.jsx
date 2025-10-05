@@ -9,6 +9,7 @@ export default function Page() {
   const [userType, setUserType] = useState(null); 
   const [showSelection, setShowSelection] = useState(true);
   const [showAR, setShowAR] = useState(false);
+  const [activeTab, setActiveTab] = useState("input");
 
   const handleARClick = () => {
     setShowAR(!showAR);
@@ -30,7 +31,7 @@ export default function Page() {
     st_logg: ''        // Stellar Surface Gravity (log g)
   });
   const [predictionResult, setPredictionResult] = useState(null);
-  const [isLoadingPrediction, setIsfingPrediction] = useState(false);
+  const [isLoadingPrediction, setIsLoadingPrediction] = useState(false);
   const [predictionError, setPredictionError] = useState(null);
 
   // Handle prediction form input changes
@@ -1182,6 +1183,33 @@ print(response.json()["prediction"])`}</code>
                 </p>
               </div>
 
+                  <div className="mb-8">
+                    <div className="flex border-b border-gray-700">
+                      <button
+                        onClick={() => setActiveTab("input")}
+                        className={`px-6 py-3 font-medium ${activeTab === "input" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Model Input Parameters
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("batch")}
+                        className={`px-6 py-3 font-medium ${activeTab === "batch" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Batch Analysis
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("hyper")}
+                        className={`px-6 py-3 font-medium ${activeTab === "hyper" ? "border-b-2 border-white text-white" : "text-gray-400"
+                          }`}
+                      >
+                        Hyperparameter Tuning
+                      </button>
+                    </div>
+                  </div>
+        <div>
+          {activeTab === "input" && (
               <div className="grid lg:grid-cols-2 gap-12">
                 {/* Input Form */}
                 <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
@@ -1479,6 +1507,22 @@ print(response.json()["prediction"])`}</code>
                           <p><strong className="text-white">Features:</strong> 12 planetary and stellar parameters</p>
                           <p><strong className="text-white">Prediction:</strong> Binary classification (Planet/Not Planet)</p>
                         </div>
+                        <br/>
+                        <h5 className="text-lg font-bold text-white mb-3">Model Metrics</h5>
+                            <div className="text-sm text-gray-300 grid grid-cols-2 gap-2">
+                              <p>
+                                <strong className="text-white">Accuracy:</strong> 86.93%
+                              </p>
+                              <p>
+                                <strong className="text-white">Precision:</strong> 0.894
+                              </p>
+                              <p>
+                                <strong className="text-white">Recall:</strong> 0.954
+                              </p>
+                              <p>
+                                <strong className="text-white">F1 Score:</strong> {/* Add value here */}
+                              </p>
+                            </div>
                       </div>
                     </div>
                   )}
@@ -1498,7 +1542,179 @@ print(response.json()["prediction"])`}</code>
                     </div>
                   )}
                 </div>
+                </div>
+          )}
+          {activeTab === "batch" && (
+            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+              <h4 className="text-2xl font-bold text-white mb-6">Batch Analysis</h4>
+              <p className="text-gray-300">
+                Upload CSV or input multiple data points to get batch predictions for multiple celestial objects.
+              </p>
+              <input
+        type="file"
+        accept=".csv"
+        className="block w-full text-sm text-gray-300
+          file:mr-4 file:py-2 file:px-4
+          file:rounded-lg file:border-0
+          file:text-sm file:font-semibold
+          file:bg-gray-700 file:text-white
+          hover:file:bg-gray-600
+          mb-6"
+      />
+            </div>
+          )}
+
+          {activeTab === "hyper" && (
+            // <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
+            //   <h4 className="text-2xl font-bold text-white mb-6">Hyperparameter Tuning</h4>
+            //   <p className="text-gray-300">
+            //     Adjust hyperparameters of the machine learning model and see their effect on prediction performance.
+            //   </p>
+            //   {/* Add hyperparameter tuning controls here */}
+            // </div>
+             <div className="space-y-8 text-gray-200">
+      <h2 className="text-xl font-semibold text-white">Hyperparameter Tuning</h2>
+
+      {/* === Random Forest & Gradient Boosting === */}
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Random Forest */}
+        <div className="p-5 bg-gray-800 rounded-2xl shadow">
+          <h3 className="text-lg font-semibold text-yellow-400 mb-4">Random Forest</h3>
+          <div className="space-y-3">
+            <div>
+              <label className="block">RF: n_estimators (100)</label>
+              <input type="range" min="50" max="500" step="10" value="100" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">RF: max_depth (10)</label>
+              <input type="range" min="5" max="30" step="1" value="10" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">RF: min_samples_split (2)</label>
+              <input type="range" min="2" max="20" step="1" value="2" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">RF: min_samples_leaf (1)</label>
+              <input type="range" min="1" max="10" step="1" value="1" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">RF: max_features</label>
+              <select className="w-full bg-gray-700 rounded p-2" value="sqrt" disabled>
+                <option>sqrt</option>
+                <option>log2</option>
+                <option>None</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Gradient Boosting */}
+        <div className="p-5 bg-gray-800 rounded-2xl shadow">
+          <h3 className="text-lg font-semibold text-green-400 mb-4">Gradient Boosting</h3>
+          <div className="space-y-3">
+            <div>
+              <label className="block">GB: n_estimators (100)</label>
+              <input type="range" min="50" max="300" step="10" value="100" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">GB: learning_rate (0.1)</label>
+              <input type="range" min="0.01" max="0.3" step="0.01" value="0.1" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">GB: max_depth (5)</label>
+              <input type="range" min="3" max="10" step="1" value="5" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">GB: min_samples_split (2)</label>
+              <input type="range" min="2" max="20" step="1" value="2" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">GB: subsample (0.8)</label>
+              <input type="range" min="0.5" max="1" step="0.05" value="0.8" readOnly className="w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* === XGBoost === */}
+      <details className="bg-gray-800 p-5 rounded-2xl shadow">
+        <summary className="cursor-pointer font-semibold text-blue-400 mb-4">
+          XGBoost Parameters
+        </summary>
+        <div className="grid md:grid-cols-2 gap-8 mt-3">
+          <div className="space-y-3">
+            <div>
+              <label className="block">XGB: n_estimators (100)</label>
+              <input type="range" min="50" max="300" step="10" value="100" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">XGB: learning_rate (0.1)</label>
+              <input type="range" min="0.01" max="0.3" step="0.01" value="0.1" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">XGB: max_depth (6)</label>
+              <input type="range" min="3" max="10" step="1" value="6" readOnly className="w-full" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <label className="block">XGB: min_child_weight (3)</label>
+              <input type="range" min="1" max="10" step="1" value="3" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">XGB: subsample (0.8)</label>
+              <input type="range" min="0.5" max="1" step="0.05" value="0.8" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">XGB: colsample_bytree (0.8)</label>
+              <input type="range" min="0.5" max="1" step="0.05" value="0.8" readOnly className="w-full" />
+            </div>
+          </div>
+        </div>
+      </details>
+
+      {/* === LightGBM === */}
+      <details className="bg-gray-800 p-5 rounded-2xl shadow">
+        <summary className="cursor-pointer font-semibold text-pink-400 mb-4">
+          LightGBM Parameters
+        </summary>
+        <div className="grid md:grid-cols-2 gap-8 mt-3">
+          <div className="space-y-3">
+            <div>
+              <label className="block">LGB: n_estimators (100)</label>
+              <input type="range" min="50" max="300" step="10" value="100" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">LGB: learning_rate (0.1)</label>
+              <input type="range" min="0.01" max="0.3" step="0.01" value="0.1" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">LGB: max_depth (6)</label>
+              <input type="range" min="3" max="15" step="1" value="6" readOnly className="w-full" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <label className="block">LGB: num_leaves (31)</label>
+              <input type="range" min="10" max="100" step="5" value="31" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">LGB: min_child_samples (20)</label>
+              <input type="range" min="5" max="50" step="5" value="20" readOnly className="w-full" />
+            </div>
+            <div>
+              <label className="block">LGB: subsample (0.8)</label>
+              <input type="range" min="0.5" max="1" step="0.05" value="0.8" readOnly className="w-full" />
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+          )}
               </div>
+            
             </div>
           </section>
 
