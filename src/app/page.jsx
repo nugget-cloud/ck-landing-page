@@ -997,6 +997,16 @@ Discover and explore exoplanets effortlessly with AI-powered detection, interact
                 </div>
               </div>
             </div>
+            <br/>
+            <div className="max-w-7xl mx-auto">
+              <iframe
+                src="https://nasa-exoplanet-plot.onrender.com/"
+                width="100%"
+                height="600px"
+                frameborder="0"
+                allowfullscreen>
+              </iframe></div>
+            
           </section>
         </>
       )}
