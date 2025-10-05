@@ -215,9 +215,7 @@ export default function Page() {
           </h2>
           
           <p className="text-gray-300 text-xl md:text-2xl font-light max-w-4xl mx-auto mb-12 leading-relaxed">
-            Transform thousands of lines of complex astronomical data processing into elegant, 
-            simple queries. Access NASA's exoplanet archives with Query Builder, TAP services, 
-            and seamless data migration.
+Discover and explore exoplanets effortlessly with AI-powered detection, interactive Python SDK, intelligent assistant, and immersive AR 3D visualizations.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -923,9 +921,9 @@ pipeline.load_custom_query(query, "bigquery")`}</code>
               >
                 Try it out →
               </button>
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl mr-4 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center mb-6 text-black">
+                <div className="w-16 h-16 bg-white text-black rounded-xl mr-4 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-black " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
@@ -1388,7 +1386,7 @@ print(response.json()["prediction"])`}</code>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-xl font-bold text-green-400 mb-4">Space Port Approach</h5>
+                      <h5 className="text-xl font-bold text-white-400 text-bold mb-4">Space Port Approach</h5>
                       <ul className="space-y-3 text-gray-300">
                         <li>• <code className="text-blue-300">NASAPipeline.for_local_development()</code></li>
                         <li>• <code className="text-purple-300">QueryBuilder().select().where()</code></li>
@@ -1679,8 +1677,8 @@ def run_pipeline():
                       <h4 className="text-xl font-bold text-white mb-4">Output Example</h4>
                       <div className="font-mono text-sm text-gray-300 space-y-1">
                         <div>Starting NASA exoplanet pipeline...</div>
-                        <div>⏳ Running pipeline...</div>
-                        <div>✅ Success! Processed 1 packages</div>
+                        <div>Running pipeline...</div>
+                        <div>Success! Processed 1 packages</div>
                         <div>Created tables: ['recent_discoveries']</div>
                         <div className="mt-2 text-white">Recent Exoplanet Discoveries:</div>
                         <div className="ml-4 text-gray-400">
