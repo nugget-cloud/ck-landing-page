@@ -30,7 +30,7 @@ export default function Page() {
     st_logg: ''        // Stellar Surface Gravity (log g)
   });
   const [predictionResult, setPredictionResult] = useState(null);
-  const [isLoadingPrediction, setIsLoadingPrediction] = useState(false);
+  const [isLoadingPrediction, setIsfingPrediction] = useState(false);
   const [predictionError, setPredictionError] = useState(null);
 
   // Handle prediction form input changes
@@ -1191,7 +1191,7 @@ print(response.json()["prediction"])`}</code>
                       onClick={loadExampleData}
                       className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-500 transition-all"
                     >
-                      Load Earth Example
+                      Load Exoplanet(BD+20 594) Example
                     </button>
                   </div>
                   
