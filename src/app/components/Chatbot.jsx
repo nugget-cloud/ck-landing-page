@@ -11,7 +11,7 @@ export default function Chatbot() {
     {
       role: 'assistant',
       content:
-        "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data pipelines, query building, and any questions about our library. How can I assist you today?",
+        "Hi! I'm your Space Port assistant. I can help you with NASA exoplanet data, and also provide your date of birth to see your relation with exoplanets. How can I assist you today?",
     },
   ]);
 
