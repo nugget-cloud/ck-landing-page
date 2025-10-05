@@ -278,7 +278,7 @@ Discover and explore exoplanets effortlessly with AI-powered detection, interact
       {userType === 'beginner' && (
         <>
           {/* Sticky Progress Navigation */}
-          {/* <StickyNav /> */}
+          <StickyNav />
 
           {/* Learning Hero */}
           <section className="relative z-10 py-24 px-8 text-center">
