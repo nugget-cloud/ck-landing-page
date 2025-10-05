@@ -211,9 +211,9 @@ export default function Page() {
       <main className="relative z-10 flex flex-col items-center justify-center px-4 sm:px-8 py-12 sm:py-20 min-h-[80vh]">
         <div className="text-center mb-8 sm:mb-12 max-w-6xl">
           <h2 className="hero-title text-4xl sm:text-6xl md:text-8xl font-bold text-white leading-tight mb-6 sm:mb-8">
-            NASA Exoplanet
+            NASA's Exoplanet
             <br />
-            <span className="gradient-text">Data Pipeline</span>
+            <span className="gradient-text">Challenge</span>
           </h2>
           
           <p className="text-gray-300 text-xl md:text-2xl font-light max-w-4xl mx-auto mb-12 leading-relaxed">
@@ -1275,229 +1275,7 @@ def run_pipeline():
       </section>
 
       {/* Community Section */}
-      <section id="community" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/20 to-transparent">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h3 className="text-5xl font-bold text-white mb-6">
-              <span className="gradient-text">Community</span> Contributions
-            </h3>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
-              Join the Space Port community! Share your pipeline implementations, contribute to the ecosystem, 
-              and help fellow researchers access NASA's exoplanet data more efficiently.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            {/* Share Your Pipeline */}
-            <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
-              <h4 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold mr-3">+</span>
-              Share Your Model
-              </h4>
-              <p className="text-gray-300 mb-6">
-                Contribute your Space Port ExoPlanet Model implementations to help the community. Share specialized 
-                queries, data processing workflows, and analysis tools , ML models
-              </p>
-              
-              <form className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Project Name</label>
-                  <input
-                    type="text"
-                    placeholder="e.g., Multi-Star System Analysis"
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">GitHub Repository URL</label>
-                  <input
-                    type="url"
-                    placeholder="https://github.com/username/repo"
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                  <textarea
-                    rows="3"
-                    placeholder="Describe what your pipeline does and its use cases..."
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-white resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
-                  <input
-                    type="text"
-                    placeholder="exoplanets, habitable-zone, transit-analysis"
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-white"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
-                >
-                  Submit Model
-                </button>
-              </form>
-            </div>
-
-            {/* Community Stats */}
-            <div className="space-y-8">
-              <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                <h4 className="text-xl font-bold text-white mb-4">Community Statistics</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1">1,247</div>
-                    <div className="text-sm text-gray-400">Shared Pipelines</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1">3,892</div>
-                    <div className="text-sm text-gray-400">Active Users</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1">15.2M</div>
-                    <div className="text-sm text-gray-400">Exoplanets Analyzed</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1">847</div>
-                    <div className="text-sm text-gray-400">Contributors</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                <h4 className="text-xl font-bold text-white mb-4">Featured Contributors</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black text-xs font-bold">
-                        AE
-                      </div>
-                      <div>
-                        <div className="text-white text-sm font-medium">AstroExplorer</div>
-                        <div className="text-gray-400 text-xs">23 pipelines</div>
-                      </div>
-                    </div>
-                    <div className="text-gray-400 text-xs">⭐ 1,247</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                        DR
-                      </div>
-                      <div>
-                        <div className="text-white text-sm font-medium">DataRanger</div>
-                        <div className="text-gray-400 text-xs">18 pipelines</div>
-                      </div>
-                    </div>
-                    <div className="text-gray-400 text-xs">⭐ 892</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-black text-xs font-bold">
-                        SP
-                      </div>
-                      <div>
-                        <div className="text-white text-sm font-medium">SpacePython</div>
-                        <div className="text-gray-400 text-xs">15 pipelines</div>
-                      </div>
-                    </div>
-                    <div className="text-gray-400 text-xs">⭐ 743</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h4 className="text-2xl font-bold text-white mb-8 text-center">Recent Community Contributions</h4>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Habitable Zone Hunter",
-                  author: "AstroExplorer",
-                  description: "Identifies potentially habitable exoplanets based on distance from their host star and planetary characteristics.",
-                  tags: ["habitable-zone", "earth-like", "analysis"],
-                  stars: 234,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                },
-                {
-                  title: "Transit Light Curves",
-                  author: "DataRanger", 
-                  description: "Processes NASA transit photometry data to extract planetary radius and orbital period measurements.",
-                  tags: ["transit", "photometry", "kepler"],
-                  stars: 189,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                },
-                {
-                  title: "Multi-Star Systems",
-                  author: "SpacePython",
-                  description: "Analyzes complex multi-star systems and their planetary companions using advanced orbital mechanics.",
-                  tags: ["binary-stars", "orbital-dynamics", "complex-systems"],
-                  stars: 156,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                },
-                {
-                  title: "Atmospheric Analysis", 
-                  author: "CosmicCoder",
-                  description: "Pipeline for processing spectroscopic data to determine exoplanet atmospheric composition.",
-                  tags: ["spectroscopy", "atmosphere", "jwst"],
-                  stars: 143,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                },
-                {
-                  title: "Planet Population Stats",
-                  author: "StatSpace",
-                  description: "Statistical analysis of exoplanet populations across different stellar types and galactic regions.",
-                  tags: ["statistics", "population", "demographics"],
-                  stars: 128,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                },
-                {
-                  title: "Radial Velocity Hunter",
-                  author: "VelocityVoyager",
-                  description: "Detects exoplanets using radial velocity method and calculates precise orbital parameters.",
-                  tags: ["radial-velocity", "doppler", "detection"],
-                  stars: 112,
-                  language: "Python",
-                  link: "https://github.com/Samant-Patil1/ml-model-code-bloooded/tree/main"
-                }
-              ].map((pipeline, index) => (
-                <a key={index} href={pipeline.link} target="_blank" rel="noopener noreferrer" className="block bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-white/30 transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h5 className="text-lg font-bold text-white">{pipeline.title}</h5>
-                    <div className="flex items-center text-gray-400 text-sm">
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      {pipeline.stars}
-                    </div>
-                  </div>
-                  <p className="text-gray-300 text-sm mb-4">{pipeline.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {pipeline.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-gray-400 text-sm">by {pipeline.author}</div>
-                    <div className="text-white hover:text-gray-300 transition-colors text-sm">
-                      View Code →
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Exoplanet Prediction Model Section */}
       <section id="prediction" className="relative z-10 py-24 px-8 bg-gradient-to-b from-gray-900/20 to-gray-900/30">
@@ -1746,7 +1524,6 @@ def run_pipeline():
 
               {predictionResult && (
                 <div className="space-y-6">
-                  {/* Main Prediction Result */}
                   <div className={`border rounded-xl p-6 ${
                     predictionResult.prediction === 1 
                       ? 'bg-green-900/30 border-green-500/30' 
@@ -1756,7 +1533,7 @@ def run_pipeline():
                       <div className={`text-4xl font-bold mb-2 ${
                         predictionResult.prediction === 1 ? 'text-green-400' : 'text-orange-400'
                       }`}>
-                        {predictionResult.prediction === 1 ? '✅ EXOPLANET' : '❌ NOT EXOPLANET'}
+                        {predictionResult.prediction === 1 ? 'EXOPLANET' : 'NOT EXOPLANET'}
                       </div>
                       <p className="text-gray-300">
                         The model predicts this object is {predictionResult.prediction === 1 ? '' : 'not '}
@@ -1833,103 +1610,6 @@ def run_pipeline():
         </div>
       </section>
 
-      {/* Models Section */}
-      <section id="models" className="relative z-10 py-24 px-8 bg-gradient-to-b from-transparent to-gray-900/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h3 className="text-5xl font-bold text-white mb-6">
-              Hosted <span className="gradient-text">Models</span>
-            </h3>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
-              Access pre-trained models and analytical tools hosted by the Space Port community. 
-              These models are ready to use with your NASA exoplanet data pipelines.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                title: "Exoplanet Classification Model",
-                description: "Machine learning model that classifies exoplanets into categories: terrestrial, super-Earth, Neptune-like, and gas giant based on physical properties.",
-                author: "MLAstronomer",
-                status: "Active",
-                usage: "1.2K",
-                endpoint: "/api/models/classify",
-                features: ["Mass prediction", "Radius estimation", "Composition analysis"]
-              },
-              {
-                title: "Habitability Score Calculator", 
-                description: "Calculates habitability scores for exoplanets based on stellar flux, atmospheric conditions, and orbital characteristics.",
-                author: "HabitableWorlds",
-                status: "Active", 
-                usage: "847",
-                endpoint: "/api/models/habitability",
-                features: ["Temperature modeling", "Atmosphere analysis", "Water probability"]
-              },
-              {
-                title: "Transit Duration Predictor",
-                description: "Predicts transit durations and depths for exoplanets using orbital mechanics and stellar parameters.",
-                author: "TransitTracker",
-                status: "Active",
-                usage: "623", 
-                endpoint: "/api/models/transit",
-                features: ["Duration prediction", "Depth calculation", "Timing analysis"]
-              }
-            ].map((model, index) => (
-              <div key={index} className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover:border-white/30 transition-all">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h4 className="text-xl font-bold text-white mb-2">{model.title}</h4>
-                    <div className="flex items-center space-x-4 text-sm text-gray-400">
-                      <span>by {model.author}</span>
-                      <span className="flex items-center">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
-                        {model.status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-gray-300 text-sm mb-6">{model.description}</p>
-                
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <h5 className="text-white text-sm font-medium mb-2">Features:</h5>
-                    <ul className="space-y-1">
-                      {model.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="text-gray-300 text-sm flex items-center">
-                          <span className="w-1 h-1 bg-gray-400 rounded-full mr-2"></span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-gray-800/50 rounded p-3">
-                    <div className="text-gray-400 text-xs mb-1">API Endpoint:</div>
-                    <code className="text-white text-sm font-mono">{model.endpoint}</code>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <div className="text-gray-400 text-sm">{model.usage} uses this month</div>
-                  <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all">
-                    Use Model
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <button className="bg-gray-800 text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-700 transition-all">
-              Browse All Models ({Math.floor(Math.random() * 20) + 15})
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className="relative z-10 py-12 px-8 bg-gray-900/60 border-t border-gray-800">
         <div className="max-w-6xl mx-auto text-center">
           <div className="mb-8">
