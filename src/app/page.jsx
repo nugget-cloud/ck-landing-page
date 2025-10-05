@@ -2128,7 +2128,7 @@ def run_pipeline():
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 mb-8">
             <div className="flex gap-6 text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Documentation</a>
-              <a href="#" className="hover:text-white transition-colors">GitHub</a>
+              <a href="https://linktr.ee/gitrepos" className="hover:text-white transition-colors">GitHub</a>
               <a href="#" className="hover:text-white transition-colors">Examples</a>
               <a href="#" className="hover:text-white transition-colors">Support</a>
             </div>
